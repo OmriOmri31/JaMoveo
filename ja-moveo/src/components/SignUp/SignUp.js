@@ -4,6 +4,12 @@ const SignUp = () => {
     //Nickname
     const [nickname, setNickname] = useState('');
 
+    //Password
+    const [password, setPassword] = useState('');
+
+    //Admin User
+    const [imTheBoss, setImTheBoss] = useState(false);
+
     //Array of builtIn images
     const builtInImages = [
         '/assets/Bunny.webp',
@@ -27,6 +33,7 @@ const SignUp = () => {
         e.preventDefault(); // Prevents the page from refreshing
         console.log({
             nickname,
+            password,
             selectedBuiltInImage,
             uploadedImage,
             instrument
@@ -63,12 +70,36 @@ return (
                     />
                 </label>
             </div>
-            <br />
+            {/* Password input field */}
+            <div>
+                <label>
+                    Password:
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                    />
+                </label>
+            </div>
+            <br/>
+            <div>
+                <label>
+                    Admin:
+                    <input
+                        type="radio"
+                        value={imTheBoss}
+                        onChange={(e) => setImTheBoss(e.target.value)}
+                        placeholder="Are you the boss?"
+                    />
+                </label>
+            </div>
+            <br/>
             {/* Image Selection Section */}
             <div>
                 <label>Choose an Image:</label>
                 {/* Display the built-in images as selectable options */}
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{display: 'flex', gap: '10px'}}>
                     {builtInImages.map((img, index) => (
                         <div
                             key={index}
@@ -80,7 +111,7 @@ return (
                                 cursor: 'pointer'
                             }}
                         >
-                            <img src={img} alt={`Built in ${index + 1}`} style={{ width: '100px', height: '100px' }} />
+                            <img src={img} alt={`Built in ${index + 1}`} style={{width: '100px', height: '100px'}}/>
                         </div>
                     ))}
                 </div>
@@ -88,11 +119,11 @@ return (
                 <div>
                     <label>
                         Or Upload an Image:
-                        <input type="file" accept="image/*" onChange={handleImageUpload} />
+                        <input type="file" accept="image/*" onChange={handleImageUpload}/>
                     </label>
                 </div>
             </div>
-            <br />
+            <br/>
             {/* Instrument Dropdown */}
             <div>
                 <label>
@@ -107,7 +138,7 @@ return (
                     </select>
                 </label>
             </div>
-            <br />
+            <br/>
             {/* Submit button: clicking it will trigger handleSubmit */}
             <button type="submit">Sign Up</button>
         </form>
