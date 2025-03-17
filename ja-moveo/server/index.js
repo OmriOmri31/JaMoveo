@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 // Register Route (POST /register)
 app.post('/register', async (req, res) => {
     try {
-        const { nickname, password, instrument } = req.body;
+        const { nickname, password, instrument, isAdmin } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ nickname });
@@ -56,7 +56,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create and save new user
-        const newUser = new User({ nickname, password: hashedPassword, instrument });
+        const newUser = new User({ nickname, password: hashedPassword, instrument, isAdmin });
         await newUser.save();
 
         res.status(201).json({ message: 'User registered successfully!' });
@@ -85,7 +85,7 @@ app.post('/login', async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.json({ message: 'Login successful', token });
+        res.json({ message: 'Login successful', token, isAdmin: user.isAdmin });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }

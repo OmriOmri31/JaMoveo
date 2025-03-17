@@ -35,7 +35,8 @@ const SignUpAdmin = () => {
                 body: JSON.stringify({
                     nickname,
                     password,
-                    instrument
+                    instrument,
+                    isAdmin
                 })
             });
 

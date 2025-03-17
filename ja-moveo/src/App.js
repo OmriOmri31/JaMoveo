@@ -9,6 +9,7 @@ import SignUpAdmin from './components/SignUpAdmin';
 import Welcome from "./components/Welcome";
 import LogIn from "./components/LogIn";
 import Home from "./components/Home";
+import HomeAdmin from "./components/HomeAdmin";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                 <Route path="/ImTheBoss" element={<SignUpAdmin/>}/>
                 <Route path="/login" element={<LogIn/>}/>
                 <Route path="/Home" element={<Home/>}/>
+                <Route path="/HomeAdmin" element={<HomeAdmin />} />
             </Routes>
         </Router>
 

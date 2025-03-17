@@ -14,7 +14,10 @@ const LogIn = () => {
             body: JSON.stringify({ nickname, password }),
         });
         const data = await response.json();
-        response.ok ? navigate("/Home") : alert("Try Again!");
+        if(response.ok) {
+            data.isAdmin ? navigate("/HomeAdmin") : navigate("/Home");
+        }
+        else alert("Try Again!");
     };
 
     return (
