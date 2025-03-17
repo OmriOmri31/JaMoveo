@@ -4,14 +4,17 @@ import { io } from 'socket.io-client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
-import SignUp from './components/SignUp/SignUp';
-import SignUpAdmin from './components/SignUp/SignUpAdmin';
+import SignUp from './components/SignUp';
+import SignUpAdmin from './components/SignUpAdmin';
+import Welcome from "./components/Welcome";
+import LogIn from "./components/LogIn";
+import Home from "./components/Home";
 
 
 function App() {
     useEffect(() => {
         // Connect to the Socket.io server
-        const socket = io('http://localhost:3001');
+        const socket = io('http://localhost:3000');
 
         // Log when successfully connected
         socket.on('connect', () => {
@@ -27,8 +30,11 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<SignUp/>}/>
+                <Route path="/" element={<Welcome/>}/>
+                <Route path="/SignUp" element={<SignUp/>}/>
                 <Route path="/ImTheBoss" element={<SignUpAdmin/>}/>
+                <Route path="/login" element={<LogIn/>}/>
+                <Route path="/Home" element={<Home/>}/>
             </Routes>
         </Router>
 

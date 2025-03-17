@@ -65,7 +65,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Login Route (POST /login)
+// Login Route (POST /LogIn)
 app.post('/login', async (req, res) => {
     try {
         const { nickname, password } = req.body;
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// ------------------- Socket.io ------------------- //
+
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
