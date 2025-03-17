@@ -10,6 +10,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User'); // Import User model
 
+// In-memory registry to store active session codes
+const activeSessions = {};
+
 // Initialize Express and create HTTP server
 const app = express();
 const server = http.createServer(app);
@@ -17,6 +20,31 @@ const server = http.createServer(app);
 // Allow requests from frontend
 app.use(cors());
 app.use(express.json());
+
+const Session = require('./models/Session');
+// Endpoint to check if a session exists
+app.get('/session/:code', async (req, res) => {
+    try {
+        const session = await Session.findOne({ code: req.params.code });
+        if (session) res.json({ exists: true });
+        else res.status(404).json({ message: "Session doesn't exist" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
+
+// Endpoint for admin to create a session
+app.post('/create-session', async (req, res) => {
+    try {
+        const code = Math.floor(10000 + Math.random() * 90000).toString(); // Generate 5-digit code
+        const newSession = new Session({ code });
+        await newSession.save();
+        res.status(201).json({ code });
+    } catch (error) {
+        res.status(500).json({ message: "Error creating session", error });
+    }
+});
 
 // Initialize Socket.io
 const io = new Server(server, {

@@ -4,20 +4,28 @@ import { useNavigate } from 'react-router-dom';
 const HomeAdmin = () => {
     const navigate = useNavigate();
 
-    const handleCreateJamSession = () => {
-        // Generate a random 5-digit code
-        const code = Math.floor(10000 + Math.random() * 90000);
-        // Redirect to the lobby URL with the generated code
-        navigate(`/lobby_${code}`);
+    // When clicked, call the server to create a session and then navigate to that lobby.
+    const createJamSession = async () => {
+        try {
+            const res = await fetch("http://localhost:3001/create-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await res.json();
+            if (res.ok) {
+                navigate(`/lobby/${data.code}`);
+            } else {
+                alert("Failed to create session");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Server error");
+        }
     };
-
     return (
-        <div style={{ margin: '20px' }}>
-            <button onClick={handleCreateJamSession}>
-                Create a jam session
-            </button>
+        <div style={{ margin: "20px" }}>
+            <button onClick={createJamSession}>Create a jam session</button>
         </div>
     );
 };
-
 export default HomeAdmin;

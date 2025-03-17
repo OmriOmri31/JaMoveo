@@ -10,6 +10,7 @@ import Welcome from "./components/Welcome";
 import LogIn from "./components/LogIn";
 import Home from "./components/Home";
 import HomeAdmin from "./components/HomeAdmin";
+import Lobby from "./components/Lobby";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/login" element={<LogIn/>}/>
                 <Route path="/Home" element={<Home/>}/>
                 <Route path="/HomeAdmin" element={<HomeAdmin />} />
+                <Route path="/lobby/:code" element={<Lobby />} />
             </Routes>
         </Router>
 
