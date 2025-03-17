@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 
-const SignUp = () => {
+const SignUpAdmin = () => {
     // State variables
     const [nickname, setNickname] = useState('');
     const [password, setPassword] = useState('');
     const [selectedBuiltInImage, setSelectedBuiltInImage] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null);
     const [instrument, setInstrument] = useState('');
+    const [isAdmin, setIsAdmin] = useState(true);
 
     // Built-in images array
     const builtInImages = [
@@ -69,8 +70,8 @@ const SignUp = () => {
             <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 {/* Button to go to Admin Signup */}
-                <button type="button" onClick={() => window.location.href = "/ImTheBoss"}>
-                    Sign Up as Admin
+                <button type="button" onClick={() => window.location.href = "/"}>
+                    Sign Up as a Simple User
                 </button>
                 {/* Nickname Input Field */}
                 <div>
@@ -148,4 +149,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default SignUpAdmin;

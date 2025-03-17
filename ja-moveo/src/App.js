@@ -1,7 +1,12 @@
 // src/App.js
 import React, { useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+
 import SignUp from './components/SignUp/SignUp';
+import SignUpAdmin from './components/SignUp/SignUpAdmin';
+
 
 function App() {
     useEffect(() => {
@@ -20,10 +25,13 @@ function App() {
     }, []);
 
     return (
-        <div className="App">
-            <h1>Welcome to the App</h1>
-            <SignUp />
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<SignUp/>}/>
+                <Route path="/ImTheBoss" element={<SignUpAdmin/>}/>
+            </Routes>
+        </Router>
+
     );
 }
 
