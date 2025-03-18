@@ -14,6 +14,7 @@ async function extractChords(url){
 
 async function extractLyrics(songWithChords) {
     // Regex to match a chord (e.g., "C", "G/B", "Am", "F#m7", etc.)
+    //Regex breakdown at EOF
     const chordRegex = /^(?:(?:[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?(?:\/[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?){0,1})|(?:[xX]\d+))$/;    // Split the song text into individual lines.
 
     // Split the song text into individual lines.
@@ -56,3 +57,29 @@ extractChords('https://tabs.ultimate-guitar.com/tab/justin-bieber/love-yourself-
         console.log(lyrics);
     })
     .catch(err => console.error(err));*/
+
+// Regex explanation:
+// ^                             : Start of string.
+// (?:
+//   (?:                         : Begin chord pattern.
+//     [A-G]                    // Base note (A to G).
+//     (?:[#b])?                // Optional accidental: '#' or 'b'.
+//     (?:(?:maj|min|m|sus|dim|aug|add))?
+//                               // Optional chord quality.
+//     (?:\d+(?:[b#]\d+)?)*      // Zero or more chord extensions (e.g., "7" or "7b5").
+//     (?:[xX]\d+)?             // Optional multiplier (e.g., "x2" or "X3").
+//     (?:                      // Begin optional slash chord:
+//       \/                     // Slash separator.
+//       [A-G]                  // Base note for the slash chord.
+//       (?:[#b])?              // Optional accidental for the slash chord.
+//       (?:(?:maj|min|m|sus|dim|aug|add))?
+//                              // Optional chord quality for the slash chord.
+//       (?:\d+(?:[b#]\d+)?)*    // Zero or more chord extensions for the slash chord.
+//       (?:[xX]\d+)?           // Optional multiplier for the slash chord.
+//     ){0,1}                   // End optional slash chord (occurs 0 or 1 time).
+//   )                           // End chord pattern.
+//   |                           // OR
+//   (?:[xX]\d+)                // Standalone multiplier (e.g., "x2" or "X2").
+// )                             // End non-capturing group for the alternatives.
+// $                             : End of string.
+///^(?:(?:[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?(?:\/[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?){0,1})|(?:[xX]\d+))$/
