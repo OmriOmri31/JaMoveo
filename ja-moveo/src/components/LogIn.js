@@ -18,6 +18,7 @@ const LogIn = () => {
             localStorage.setItem('token', data.token);
             localStorage.setItem('nickname', nickname);
             localStorage.setItem('image', data.image);
+            localStorage.setItem('isAdmin', data.isAdmin.toString());
             data.isAdmin ? navigate("/HomeAdmin") : navigate("/Home");
         }
         else alert("Try Again!");
