@@ -7,6 +7,7 @@ const SignUp = () => {
     const [selectedBuiltInImage, setSelectedBuiltInImage] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null);
     const [instrument, setInstrument] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     // Built-in images array
     const builtInImages = [
@@ -34,7 +35,9 @@ const SignUp = () => {
                 body: JSON.stringify({
                     nickname,
                     password,
-                    instrument
+                    instrument,
+                    isAdmin,
+                    image: selectedBuiltInImage
                 })
             });
 

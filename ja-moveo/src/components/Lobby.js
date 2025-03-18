@@ -1,33 +1,57 @@
 // src/components/Lobby.js
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const Lobby = () => {
-    const { code } = useParams(); // Get session code from URL
+    const { code } = useParams();
     const navigate = useNavigate();
+    const [activeUsers, setActiveUsers] = useState([]);
 
     useEffect(() => {
+        // Check if the session exists on the server
         const checkSession = async () => {
             try {
                 const response = await fetch(`http://localhost:3001/session/${code}`);
                 if (!response.ok) {
+                    navigate("/Home");
                     alert("Session doesn't exist");
-                    navigate("/"); // Redirect back to Home
+                    return;
                 }
             } catch (error) {
                 console.error(error);
+                navigate("/Home");
                 alert("Server error");
-                navigate("/");
+                return;
             }
         };
 
         checkSession();
+
+        // Connect to the Socket.io server and join the lobby
+        const socket = io("http://localhost:3001");
+        socket.emit("joinLobby", { room: `lobby/${code}`, user: localStorage.getItem('nickname') });
+
+        // Listen for updates on active users in the lobby
+        socket.on("updateUsers", (users) => {
+            setActiveUsers(users);
+        });
+
+        // Cleanup socket connection on component unmount
+        return () => {
+            socket.disconnect();
+        };
     }, [code, navigate]);
 
     return (
         <div style={{ margin: "20px" }}>
             <h2>Lobby {code}</h2>
-            {/* Lobby content goes here */}
+            <h3>Active Users:</h3>
+            <ul>
+                {activeUsers.map((user) => (
+                    <li key={user.id}>{user.name}</li>
+                ))}
+            </ul>
         </div>
     );
 };

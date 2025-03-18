@@ -54,7 +54,29 @@ const io = new Server(server, {
     }
 });
 
-// ------------------- MongoDB Connection ------------------- //
+const lobbyUsers = {};
+
+io.on('connection', (socket) => {
+    socket.on('joinLobby', ({ room, user }) => {
+        socket.join(room);
+        // Add user to room list
+        if (!lobbyUsers[room]) lobbyUsers[room] = [];
+        lobbyUsers[room].push({ id: socket.id, name: user });
+        // Broadcast updated list to the room
+        io.in(room).emit('updateUsers', lobbyUsers[room]);
+    });
+
+    socket.on('disconnect', () => {
+        // Remove user from all rooms
+        for (const room in lobbyUsers) {
+            lobbyUsers[room] = lobbyUsers[room].filter(u => u.id !== socket.id);
+            io.in(room).emit('updateUsers', lobbyUsers[room]);
+        }
+    });
+});
+
+
+
 const MONGO_URI = process.env.MONGO_URI; // Read from .env file
 
 mongoose.connect(MONGO_URI, {
@@ -74,7 +96,7 @@ app.get('/', (req, res) => {
 // Register Route (POST /register)
 app.post('/register', async (req, res) => {
     try {
-        const { nickname, password, instrument, isAdmin } = req.body;
+        const { nickname, password, instrument, isAdmin, image } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ nickname });
@@ -84,7 +106,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create and save new user
-        const newUser = new User({ nickname, password: hashedPassword, instrument, isAdmin });
+        const newUser = new User({ nickname, password: hashedPassword, instrument, isAdmin, image });
         await newUser.save();
 
         res.status(201).json({ message: 'User registered successfully!' });
@@ -113,7 +135,7 @@ app.post('/login', async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.json({ message: 'Login successful', token, isAdmin: user.isAdmin });
+        res.json({ message: 'Login successful', token, isAdmin: user.isAdmin, image: user.image });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }

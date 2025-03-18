@@ -15,6 +15,9 @@ const LogIn = () => {
         });
         const data = await response.json();
         if(response.ok) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('nickname', nickname);
+            localStorage.setItem('image', data.image);
             data.isAdmin ? navigate("/HomeAdmin") : navigate("/Home");
         }
         else alert("Try Again!");

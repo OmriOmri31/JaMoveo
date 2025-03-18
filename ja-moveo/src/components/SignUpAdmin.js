@@ -36,7 +36,8 @@ const SignUpAdmin = () => {
                     nickname,
                     password,
                     instrument,
-                    isAdmin
+                    isAdmin,
+                    image: selectedBuiltInImage
                 })
             });
 
