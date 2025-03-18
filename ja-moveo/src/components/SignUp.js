@@ -139,9 +139,10 @@ const SignUp = () => {
                         <select value={instrument} onChange={(e) => setInstrument(e.target.value)} required>
                             <option value="">Select your instrument</option>
                             <option value="Guitar">Guitar</option>
+                            <option value="Bass">Bass</option>
                             <option value="Drums">Drums</option>
                             <option value="Saxophone">Saxophone</option>
-                            <option value="Piano">Piano</option>
+                            <option value="Keyboard">Keyboard</option>
                             <option value="Vocals">Vocals</option>
                         </select>
                     </label>
