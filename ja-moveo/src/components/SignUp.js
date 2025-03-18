@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     // State variables
@@ -8,6 +9,7 @@ const SignUp = () => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [instrument, setInstrument] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
+    const navigate = useNavigate();
 
     // Built-in images array
     const builtInImages = [
@@ -44,6 +46,7 @@ const SignUp = () => {
             const data = await response.json();
             if (response.ok) {
                 alert('Registration successful!');
+                navigate("/Home");
             } else {
                 alert(data.message || 'Registration failed');
             }
