@@ -1,7 +1,8 @@
-// src/components/Lobby.js
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+
 
 const Lobby = () => {
     const { code } = useParams();
@@ -44,17 +45,6 @@ const Lobby = () => {
         };
     }, [code, navigate]);
 
-    // Handle search input changes for admin users
-    const handleSearchChange = (e) => {
-        const q = e.target.value;
-        setQuery(q);
-        // Check if query contains any Hebrew letter
-        if (/[\u0590-\u05FF]/.test(q)) {
-            console.log(`https://www.tab4u.com/resultsSimple?tab=songs&q=${q}`);
-        } else {
-            console.log(`https://www.ultimate-guitar.com/search.php?search_type=title&value=${q}`);
-        }
-    };
 
     return (
         <div style={{ margin: "20px" }}>
@@ -70,14 +60,15 @@ const Lobby = () => {
                 <div>
                     <h3>Search any song...</h3>
                     <form
-                        onSubmit={(e) => {
+                        onSubmit={async (e) => {
                             e.preventDefault();
-                            // Allow white spaces, log on submit only
-                            if (/[\u0590-\u05FF]/.test(query)) {
-                                console.log(`https://www.tab4u.com/resultsSimple?tab=songs&q=${query}`);
-                            } else {
-                                console.log(`https://www.ultimate-guitar.com/search.php?search_type=title&value=${query}`);
-                            }
+                            const response = await fetch("http://localhost:3001/results", {
+                                method: "POST",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({songName: query}),
+                            });
+                            const data = await response.json();
+                            console.log(data.results);
                         }}
                     >
                         <input

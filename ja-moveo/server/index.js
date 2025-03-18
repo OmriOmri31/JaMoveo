@@ -9,9 +9,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User'); // Import User model
-
-// In-memory registry to store active session codes
-const activeSessions = {};
+const {getSongResults} = require("./utils/ResultsPage");
 
 // Initialize Express and create HTTP server
 const app = express();
@@ -22,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 const Session = require('./models/Session');
+
 // Endpoint to check if a session exists
 app.get('/session/:code', async (req, res) => {
     try {
@@ -86,7 +85,6 @@ mongoose.connect(MONGO_URI, {
     .then(() => console.log('✅ MongoDB connected'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// ------------------- Routes ------------------- //
 
 // Test API route
 app.get('/', (req, res) => {
@@ -138,6 +136,15 @@ app.post('/login', async (req, res) => {
         res.json({ message: 'Login successful', token, isAdmin: user.isAdmin, image: user.image });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
+    }
+});
+app.post('/results', async (req, res) => {
+    try {
+        const { songName } = req.body;
+        const results = await getSongResults(songName);
+        res.json({ results });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching results', error });
     }
 });
 
