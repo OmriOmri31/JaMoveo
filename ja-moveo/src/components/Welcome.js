@@ -1,6 +1,16 @@
-import React, { useState } from "react";
+//import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
 
 const Welcome = () => {
+    const navigate = useNavigate();
+    if ( localStorage.getItem("loggedIn") === "true"){
+        if ( localStorage.getItem("isAdmin") === "true"){
+            navigate("/HomeAdmin");
+        }
+        else
+            navigate("/Home");
+    }
 
     return (
         <div style={{margin: '20px'}}>

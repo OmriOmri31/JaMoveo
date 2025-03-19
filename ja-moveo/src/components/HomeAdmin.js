@@ -13,7 +13,7 @@ const HomeAdmin = () => {
             });
             const data = await res.json();
             if (res.ok) {
-                navigate(`/lobby/${data.code}`);
+                navigate(`/main/${data.code}`);
             } else {
                 alert("Failed to create session");
             }

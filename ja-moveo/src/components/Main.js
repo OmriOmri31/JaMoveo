@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
-const Lobby = () => {
+const Main = () => {
     const { code } = useParams();
     const navigate = useNavigate();
     const [activeUsers, setActiveUsers] = useState([]);
@@ -28,7 +28,7 @@ const Lobby = () => {
         checkSession();
 
         const socket = io("http://localhost:3001");
-        socket.emit("joinLobby", { room: `lobby/${code}`, user: localStorage.getItem('nickname') });
+        socket.emit("joinMain", { room: `Main/${code}`, user: localStorage.getItem('nickname') });
 
         socket.on("updateUsers", (users) => {
             setActiveUsers(users);
@@ -41,7 +41,7 @@ const Lobby = () => {
 
     return (
         <div style={{ margin: "20px" }}>
-            <h2>Lobby {code}</h2>
+            <h2>Main Page {code}</h2>
             <h3>Active Users:</h3>
             <ul>
                 {activeUsers.map((user) => (
@@ -78,4 +78,4 @@ const Lobby = () => {
     );
 };
 
-export default Lobby;
+export default Main;

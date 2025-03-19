@@ -8,7 +8,7 @@ import Welcome from "./components/Welcome";
 import LogIn from "./components/LogIn";
 import Home from "./components/Home";
 import HomeAdmin from "./components/HomeAdmin";
-import Lobby from "./components/Lobby";
+import Main from "./components/Main";
 import TableScreen from "./components/TableScreen";
 import LiveScreen from "./components/LiveScreen";
 import PrivateRoute from "./components/PrivateRoute";
@@ -43,7 +43,7 @@ function App() {
                 <Route path="/login" element={<LogIn/>}/>
                 <Route path="/Home" element={<PrivateRoute><Home /></PrivateRoute>} />
                 <Route path="/HomeAdmin" element={<PrivateRoute><HomeAdmin /></PrivateRoute>} />
-                <Route path="/lobby/:code" element={<Lobby />} />
+                <Route path="/main/:code" element={<Main />} />
                 <Route path="/table" element={<TableScreen />} />
                 <Route path="/live" element={<LiveScreen />} />
             </Routes>

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 const LogIn = () => {
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
+    //const [loggedIn, setLoggedIn] = useState(false);
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -18,6 +20,7 @@ const LogIn = () => {
             localStorage.setItem('token', data.token);
             localStorage.setItem('nickname', nickname);
             localStorage.setItem('image', data.image);
+            localStorage.setItem("loggedIn", "true");
             localStorage.setItem('isAdmin', data.isAdmin.toString());
             data.isAdmin ? navigate("/HomeAdmin") : navigate("/Home");
         }

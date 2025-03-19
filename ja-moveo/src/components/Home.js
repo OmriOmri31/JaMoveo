@@ -10,7 +10,7 @@ const Home = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (code.trim()) {
-            navigate(`/lobby/${code}`);
+            navigate(`/main/${code}`);
         } else {
             alert("Please enter a valid session code");
         }
@@ -27,7 +27,7 @@ const Home = () => {
                     onChange={(e) => setCode(e.target.value)}
                     required
                 />
-                <button type="submit">Join Lobby</button>
+                <button type="submit">Join Everyone</button>
             </form>
         </div>
     );
