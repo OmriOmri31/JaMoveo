@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import socket from './socket';
 
 import SignUp from './components/SignUp';
 import SignUpAdmin from './components/SignUpAdmin';
@@ -14,6 +14,33 @@ import LiveScreen from "./components/LiveScreen";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 
+// Global listener for socket events
+function SocketListener() {
+    const navigate = useNavigate();
+    useEffect(() => {
+        // Redirect non-admin users to LiveScreen when admin navigates there.
+        socket.on("redirectLive", (data) => {
+            const sessionCode = localStorage.getItem("sessionCode");
+            if (sessionCode && data.href) {
+                navigate(`/live/${sessionCode}`, { state: { href: data.href } });
+            }
+        });
+        // Listen for session closure
+        socket.on("sessionClosed", () => {
+            if (localStorage.getItem("isAdmin") === "true") {
+                navigate("/HomeAdmin");
+            } else {
+                navigate("/Home");
+            }
+        });
+        return () => {
+            socket.off("redirectLive");
+            socket.off("sessionClosed");
+        };
+    }, [navigate]);
+    return null;
+}
+
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     useEffect(() => {
@@ -23,18 +50,9 @@ function App() {
         }
     }, []);
 
-    useEffect(() => {
-        const socket = io('http://localhost:3000');
-        socket.on('connect', () => {
-            console.log('Connected to Socket.io server:', socket.id);
-        });
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
-
     return (
         <Router>
+            <SocketListener />
             <Header/>
             <Routes>
                 <Route path="/" element={<Welcome/>}/>
@@ -45,7 +63,7 @@ function App() {
                 <Route path="/HomeAdmin" element={<PrivateRoute><HomeAdmin /></PrivateRoute>} />
                 <Route path="/main/:code" element={<Main />} />
                 <Route path="/table" element={<TableScreen />} />
-                <Route path="/live" element={<LiveScreen />} />
+                <Route path="/live/:code" element={<LiveScreen />} />
             </Routes>
         </Router>
     );

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import socket from "../socket";
 
 const Main = () => {
     const { code } = useParams();
     const navigate = useNavigate();
     const [activeUsers, setActiveUsers] = useState([]);
     const [query, setQuery] = useState("");
+
+    // Save the session code so other pages can use it
+    localStorage.setItem("sessionCode", code);
 
     useEffect(() => {
         const checkSession = async () => {
@@ -27,17 +30,23 @@ const Main = () => {
 
         checkSession();
 
-        const socket = io("http://localhost:3001");
-        socket.emit("joinMain", { room: `Main/${code}`, user: localStorage.getItem('nickname') });
+        // Join the session room; pass isAdmin flag from localStorage
+        socket.emit("joinLobby", { room: `Main/${code}`, user: localStorage.getItem('nickname'), isAdmin: localStorage.getItem("isAdmin") === "true" });
 
         socket.on("updateUsers", (users) => {
             setActiveUsers(users);
         });
 
+        // Do not disconnect on unmount so the admin remains in the room
         return () => {
-            socket.disconnect();
+            socket.off("updateUsers");
         };
     }, [code, navigate]);
+
+    // Handler for admin to close the session
+    const handleCloseSession = () => {
+        socket.emit("closeSession", { room: `Main/${code}` });
+    };
 
     return (
         <div style={{ margin: "20px" }}>
@@ -72,6 +81,8 @@ const Main = () => {
                         />
                         <button type="submit">Search</button>
                     </form>
+                    <br />
+                    <button onClick={handleCloseSession}>Close Session</button>
                 </div>
             )}
 

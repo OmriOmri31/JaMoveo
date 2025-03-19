@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import socket from '../socket';
 
 const LiveScreen = () => {
+    const { code } = useParams();
     const location = useLocation();
     const { href } = location.state || { href: '' };
     const [chords, setChords] = useState('');
@@ -28,7 +30,11 @@ const LiveScreen = () => {
         if (href) {
             fetchChords();
         }
-    }, [href]);
+        // If admin, immediately signal all users to redirect to live view.
+        if (localStorage.getItem("isAdmin") === "true" && href) {
+            socket.emit("redirectLive", { room: `Main/${code}`, href });
+        }
+    }, [href, code]);
 
     return (
         <div style={{ margin: "20px" }}>

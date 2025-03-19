@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import socket from '../socket';
 
 const TableScreen = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { results } = location.state || { results: [] };
+    const sessionCode = localStorage.getItem("sessionCode");
+
+    useEffect(() => {
+        if(sessionCode){
+            // Rejoin the room if necessary when on TableScreen
+            socket.emit("joinLobby", { room: `Main/${sessionCode}`, user: localStorage.getItem('nickname') });
+        }
+    }, [sessionCode]);
 
     const handleRowClick = (href) => {
-        navigate('/live', { state: { href } });
+        navigate(`/live/${sessionCode}`, { state: { href } });
     };
 
     return (

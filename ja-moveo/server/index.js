@@ -1,5 +1,3 @@
-// server/index.js
-
 require('dotenv').config(); // Load environment variables from .env
 const express = require('express');
 const cors = require('cors');
@@ -33,7 +31,6 @@ app.get('/session/:code', async (req, res) => {
     }
 });
 
-
 // Endpoint for admin to create a session
 app.post('/create-session', async (req, res) => {
     try {
@@ -65,28 +62,58 @@ const io = new Server(server, {
 });
 
 const lobbyUsers = {};
+const adminForRoom = {};
 
 io.on('connection', (socket) => {
-    socket.on('joinLobby', ({ room, user }) => {
+    console.log('A user connected:', socket.id);
+
+    socket.on('joinLobby', ({ room, user, isAdmin }) => {
         socket.join(room);
-        // Add user to room list
         if (!lobbyUsers[room]) lobbyUsers[room] = [];
-        lobbyUsers[room].push({ id: socket.id, name: user });
-        // Broadcast updated list to the room
+        // Only add if not already present
+        if (!lobbyUsers[room].find(u => u.id === socket.id)) {
+            lobbyUsers[room].push({ id: socket.id, name: user });
+        }
+        // Record admin socket ID if this user is admin
+        if (isAdmin) {
+            adminForRoom[room] = socket.id;
+        }
         io.in(room).emit('updateUsers', lobbyUsers[room]);
     });
 
-    socket.on('disconnect', () => {
-        // Remove user from all rooms
-        for (const room in lobbyUsers) {
-            lobbyUsers[room] = lobbyUsers[room].filter(u => u.id !== socket.id);
-            io.in(room).emit('updateUsers', lobbyUsers[room]);
+    // When admin navigates to live, they can signal a redirection
+    socket.on("redirectLive", ({ room, href }) => {
+        socket.to(room).emit("redirectLive", { href });
+    });
+
+    // When admin explicitly closes the session
+    socket.on('closeSession', ({ room }) => {
+        if (adminForRoom[room] === socket.id) {
+            io.in(room).emit('sessionClosed');
+            delete lobbyUsers[room];
+            delete adminForRoom[room];
         }
+    });
+
+    socket.on('disconnect', () => {
+        // Check for every room the socket was in
+        for (const room in lobbyUsers) {
+            // If the disconnecting socket is the admin, close the session.
+            if (adminForRoom[room] === socket.id) {
+                io.in(room).emit('sessionClosed');
+                delete lobbyUsers[room];
+                delete adminForRoom[room];
+            } else {
+                // Otherwise, just remove the user from the room
+                lobbyUsers[room] = lobbyUsers[room].filter(u => u.id !== socket.id);
+                io.in(room).emit('updateUsers', lobbyUsers[room]);
+            }
+        }
+        console.log('A user disconnected:', socket.id);
     });
 });
 
-
-
+// Connect to MongoDB
 const MONGO_URI = process.env.MONGO_URI; // Read from .env file
 
 mongoose.connect(MONGO_URI, {
@@ -95,7 +122,6 @@ mongoose.connect(MONGO_URI, {
 })
     .then(() => console.log('✅ MongoDB connected'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
-
 
 // Test API route
 app.get('/', (req, res) => {
@@ -106,18 +132,11 @@ app.get('/', (req, res) => {
 app.post('/register', async (req, res) => {
     try {
         const { nickname, password, instrument, isAdmin, image } = req.body;
-
-        // Check if user already exists
         const existingUser = await User.findOne({ nickname });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
-
-        // Hash the password before storing
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create and save new user
         const newUser = new User({ nickname, password: hashedPassword, instrument, isAdmin, image });
         await newUser.save();
-
         res.status(201).json({ message: 'User registered successfully!' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
@@ -128,27 +147,21 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const { nickname, password } = req.body;
-
-        // Find user by nickname
         const user = await User.findOne({ nickname });
         if (!user) return res.status(400).json({ message: 'User not found' });
-
-        // Compare provided password with stored hashed password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return res.status(401).json({ message: 'Invalid credentials' });
-
-        // Generate JWT token
         const token = jwt.sign(
             { userId: user._id, nickname: user.nickname },
-            process.env.JWT_SECRET, // Secret key from .env
+            process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-
         res.json({ message: 'Login successful', token, isAdmin: user.isAdmin, image: user.image });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }
 });
+
 app.post('/results', async (req, res) => {
     try {
         const { songName } = req.body;
@@ -157,15 +170,6 @@ app.post('/results', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error fetching results', error });
     }
-});
-
-
-io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-
-    socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
-    });
 });
 
 // ------------------- Start Server ------------------- //
