@@ -40,19 +40,36 @@ async function extractChords(url) {
 }
 
 async function extractLyrics(songWithChords) {
-    const chordRegex = /^(?:(?:[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?(?:\/[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?){0,1})|(?:[xX]\d+))$/;
-    const tabRegex = /^[eBGDAE][-\s\d|xsShHpPrR\/\\]+/;
+    const chordRegex = new RegExp(
+        "^(?:(?:N\\.C|n\\.c|[xX]\\d+|[A-G](?:#|b)?(?:(?:maj(?:7|9|11|13)?)|(?:m(?:in)?(?:7|9|11|13)?)|(?:dim(?:7)?)|(?:aug(?:7)?|\\+)|(?:sus(?:2|4)?)|(?:add(?:9|11|13))|(?:6|7|9|11|13)|(?:[b#](?:5|9|11|13))|(?:\\([#b]?\\d+\\)))*)(?:/(?:N\\.C|n\\.c|[xX]\\d+|[A-G](?:#|b)?(?:(?:maj(?:7|9|11|13)?)|(?:m(?:in)?(?:7|9|11|13)?)|(?:dim(?:7)?)|(?:aug(?:7)?|\\+)|(?:sus(?:2|4)?)|(?:add(?:9|11|13))|(?:6|7|9|11|13)|(?:[b#](?:5|9|11|13))|(?:\\([#b]?\\d+\\)))*))?)$"
+    );
+
     const lines = songWithChords.split('\n');
     const filteredLines = lines.filter(line => {
-        const trimmedLine = line.trim();
-        if (trimmedLine === "") {
+        const trimmed = line.trim();
+        // Keep empty lines
+        if (trimmed === "") {
             return true;
         }
-        const words = trimmedLine.split(/\s+/);
-        const isChordLine = words.every(word => chordRegex.test(word))||words.every(word => tabRegex.test(word));
-        return !isChordLine;
+
+        // If any "word" in the line is a chord, remove the line
+        const words = trimmed.split(/\s+/);
+        if (words.some(word => chordRegex.test(word))) {
+            return false;
+        }
+
+        // If the line contains >= 5 tab-related characters (-, digits, or |), remove it
+        const tabChars = trimmed.match(/[0-9\-|]/g) || [];
+        if (tabChars.length >= 5) {
+            return false;
+        }
+
+        // Otherwise keep the line
+        return true;
     });
+
     return filteredLines.join('\n');
 }
+
 
 module.exports = { extractChords, extractLyrics };

@@ -1,7 +1,182 @@
 [
   {
-    "artist": "James Blake",
-    "songName": "Life Is Not The Same",
-    "href": "https://tabs.ultimate-guitar.com/tab/james-blake/life-is-not-the-same-chords-3915392"
+    "image": "/additions/artists_imgs/1_mashina.jpg",
+    "songName": "הכוכבים דולקים על אש קטנה /",
+    "artist": "משינה",
+    "href": "https://tab4u.com/tabs/songs/2055_%D7%9E%D7%A9%D7%99%D7%A0%D7%94_-_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D_%D7%93%D7%95%D7%9C%D7%A7%D7%99%D7%9D_%D7%A2%D7%9C_%D7%90%D7%A9_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/tipex.jpg",
+    "songName": "ביום שיפלו הכוכבים /",
+    "artist": "טיפקס",
+    "href": "https://tab4u.com/tabs/songs/1527_%D7%98%D7%99%D7%A4%D7%A7%D7%A1_-_%D7%91%D7%99%D7%95%D7%9D_%D7%A9%D7%99%D7%A4%D7%9C%D7%95_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/additions/artists_imgs/david_deor.jpg",
+    "songName": "כל הכוכבים /",
+    "artist": "דוד ד'אור",
+    "href": "https://tab4u.com/tabs/songs/1100_%D7%93%D7%95%D7%93_%D7%93%26%2339%3B%D7%90%D7%95%D7%A8_-_%D7%9B%D7%9C_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17079950448544.jpg",
+    "songName": "כל הכוכבים /",
+    "artist": "טונה",
+    "href": "https://tab4u.com/tabs/songs/70139_%D7%98%D7%95%D7%A0%D7%94_-_%D7%9B%D7%9C_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/additions/artists_imgs/eyal_golan.jpg",
+    "songName": "מכל הכוכבים בלילה /",
+    "artist": "אייל גולן והפרוייקט של עידן רייכל",
+    "href": "https://tab4u.com/tabs/songs/68173_%D7%90%D7%99%D7%99%D7%9C_%D7%92%D7%95%D7%9C%D7%9F_%D7%95%D7%94%D7%A4%D7%A8%D7%95%D7%99%D7%99%D7%A7%D7%98_%D7%A9%D7%9C_%D7%A2%D7%99%D7%93%D7%9F_%D7%A8%D7%99%D7%99%D7%9B%D7%9C_-_%D7%9E%D7%9B%D7%9C_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D_%D7%91%D7%9C%D7%99%D7%9C%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/mordehay_ben_david.jpg",
+    "songName": "שיר הכוכבים /",
+    "artist": "מרדכי בן דוד",
+    "href": "https://tab4u.com/tabs/songs/74631_%D7%9E%D7%A8%D7%93%D7%9B%D7%99_%D7%91%D7%9F_%D7%93%D7%95%D7%93_-_%D7%A9%D7%99%D7%A8_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/images/noArtPicDu.svg",
+    "songName": "בגן הכוכבים /",
+    "artist": "בן סנוף",
+    "href": "https://tab4u.com/tabs/songs/7213_%D7%91%D7%9F_%D7%A1%D7%A0%D7%95%D7%A3_-_%D7%91%D7%92%D7%9F_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17079965448130.jpg",
+    "songName": "הכוכבים בוכים בלילה /",
+    "artist": "שירי מימון, דודו אהרון ודולי ופן",
+    "href": "https://tab4u.com/tabs/songs/67364_%D7%A9%D7%99%D7%A8%D7%99_%D7%9E%D7%99%D7%9E%D7%95%D7%9F%2C_%D7%93%D7%95%D7%93%D7%95_%D7%90%D7%94%D7%A8%D7%95%D7%9F_%D7%95%D7%93%D7%95%D7%9C%D7%99_%D7%95%D7%A4%D7%9F_-_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D_%D7%91%D7%95%D7%9B%D7%99%D7%9D_%D7%91%D7%9C%D7%99%D7%9C%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/dudu88335.gif",
+    "songName": "הכוכבים בוכים בלילה /",
+    "artist": "דודו אהרון ושירי מימון",
+    "href": "https://tab4u.com/tabs/songs/68058_%D7%93%D7%95%D7%93%D7%95_%D7%90%D7%94%D7%A8%D7%95%D7%9F_%D7%95%D7%A9%D7%99%D7%A8%D7%99_%D7%9E%D7%99%D7%9E%D7%95%D7%9F_-_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D_%D7%91%D7%95%D7%9B%D7%99%D7%9D_%D7%91%D7%9C%D7%99%D7%9C%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/eyal_golan.jpg",
+    "songName": "מכל הכוכבים בלילה /",
+    "artist": "אייל גולן",
+    "href": "https://tab4u.com/tabs/songs/68169_%D7%90%D7%99%D7%99%D7%9C_%D7%92%D7%95%D7%9C%D7%9F_-_%D7%9E%D7%9B%D7%9C_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D_%D7%91%D7%9C%D7%99%D7%9C%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/hava_alber.jpg",
+    "songName": "עץ הכוכבים /",
+    "artist": "חוה אלברשטיין",
+    "href": "https://tab4u.com/tabs/songs/7757_%D7%97%D7%95%D7%94_%D7%90%D7%9C%D7%91%D7%A8%D7%A9%D7%98%D7%99%D7%99%D7%9F_-_%D7%A2%D7%A5_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/images/noArtPicDu.svg",
+    "songName": "רועת הכוכבים /",
+    "artist": "שרון קוניץ",
+    "href": "https://tab4u.com/tabs/songs/66617_%D7%A9%D7%A8%D7%95%D7%9F_%D7%A7%D7%95%D7%A0%D7%99%D7%A5_-_%D7%A8%D7%95%D7%A2%D7%AA_%D7%94%D7%9B%D7%95%D7%9B%D7%91%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/additions/artists_imgs/shlomi_gronih.jpg",
+    "songName": "כשהנרות דולקים /",
+    "artist": "שלמה גרוניך וזהו זה!",
+    "href": "https://tab4u.com/tabs/songs/74636_%D7%A9%D7%9C%D7%9E%D7%94_%D7%92%D7%A8%D7%95%D7%A0%D7%99%D7%9A_%D7%95%D7%96%D7%94%D7%95_%D7%96%D7%94%21_-_%D7%9B%D7%A9%D7%94%D7%A0%D7%A8%D7%95%D7%AA_%D7%93%D7%95%D7%9C%D7%A7%D7%99%D7%9D.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17079965448130.jpg",
+    "songName": "אהבה קטנה /",
+    "artist": "שירי מימון",
+    "href": "https://tab4u.com/tabs/songs/2411_%D7%A9%D7%99%D7%A8%D7%99_%D7%9E%D7%99%D7%9E%D7%95%D7%9F_-_%D7%90%D7%94%D7%91%D7%94_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/eyfo_hayeled.jpg",
+    "songName": "אהובה הקטנה /",
+    "artist": "איפה הילד",
+    "href": "https://tab4u.com/tabs/songs/488_%D7%90%D7%99%D7%A4%D7%94_%D7%94%D7%99%D7%9C%D7%93_-_%D7%90%D7%94%D7%95%D7%91%D7%94_%D7%94%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17082702644006.jpg",
+    "songName": "אחות קטנה /",
+    "artist": "משה פרץ",
+    "href": "https://tab4u.com/tabs/songs/67457_%D7%9E%D7%A9%D7%94_%D7%A4%D7%A8%D7%A5_-_%D7%90%D7%97%D7%95%D7%AA_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/images/noArtPicDu.svg",
+    "songName": "אחות קטנה /",
+    "artist": "יונתן שינפלד",
+    "href": "https://tab4u.com/tabs/songs/69844_%D7%99%D7%95%D7%A0%D7%AA%D7%9F_%D7%A9%D7%99%D7%A0%D7%A4%D7%9C%D7%93_-_%D7%90%D7%97%D7%95%D7%AA_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/1453796644.jpg",
+    "songName": "דירה קטנה בחיפה /",
+    "artist": "אדיר גץ",
+    "href": "https://tab4u.com/tabs/songs/6526_%D7%90%D7%93%D7%99%D7%A8_%D7%92%D7%A5_-_%D7%93%D7%99%D7%A8%D7%94_%D7%A7%D7%98%D7%A0%D7%94_%D7%91%D7%97%D7%99%D7%A4%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17078275495787.jpg",
+    "songName": "יד קטנה /",
+    "artist": "אושיק לוי",
+    "href": "https://tab4u.com/tabs/songs/72566_%D7%90%D7%95%D7%A9%D7%99%D7%A7_%D7%9C%D7%95%D7%99_-_%D7%99%D7%93_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/juzi_kaz.jpg",
+    "songName": "ילדה קטנה /",
+    "artist": "ג'וזי כץ והחלונות הגבוהים",
+    "href": "https://tab4u.com/tabs/songs/1002_%D7%92%26%2339%3B%D7%95%D7%96%D7%99_%D7%9B%D7%A5_%D7%95%D7%94%D7%97%D7%9C%D7%95%D7%A0%D7%95%D7%AA_%D7%94%D7%92%D7%91%D7%95%D7%94%D7%99%D7%9D_-_%D7%99%D7%9C%D7%93%D7%94_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/gabi_shushan.jpg",
+    "songName": "ילדה קטנה /",
+    "artist": "גבי שושן",
+    "href": "https://tab4u.com/tabs/songs/6854_%D7%92%D7%91%D7%99_%D7%A9%D7%95%D7%A9%D7%9F_-_%D7%99%D7%9C%D7%93%D7%94_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/1453796685.jpg",
+    "songName": "ילדה קטנה במזח /",
+    "artist": "אהובה עוזרי",
+    "href": "https://tab4u.com/tabs/songs/70714_%D7%90%D7%94%D7%95%D7%91%D7%94_%D7%A2%D7%95%D7%96%D7%A8%D7%99_-_%D7%99%D7%9C%D7%93%D7%94_%D7%A7%D7%98%D7%A0%D7%94_%D7%91%D7%9E%D7%96%D7%97.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17079977379578.jpg",
+    "songName": "ילדה קטנה כותבת מכתב /",
+    "artist": "אמיר דדון",
+    "href": "https://tab4u.com/tabs/songs/73619_%D7%90%D7%9E%D7%99%D7%A8_%D7%93%D7%93%D7%95%D7%9F_-_%D7%99%D7%9C%D7%93%D7%94_%D7%A7%D7%98%D7%A0%D7%94_%D7%9B%D7%95%D7%AA%D7%91%D7%AA_%D7%9E%D7%9B%D7%AA%D7%91.html"
+  },
+  {
+    "image": "/additions/artists_imgs/yoni_bloh.jpg",
+    "songName": "ילדה שלי קטנה /",
+    "artist": "יוני בלוך",
+    "href": "https://tab4u.com/tabs/songs/3562_%D7%99%D7%95%D7%A0%D7%99_%D7%91%D7%9C%D7%95%D7%9A_-_%D7%99%D7%9C%D7%93%D7%94_%D7%A9%D7%9C%D7%99_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17379650388437.jpg",
+    "songName": "ילדה שלי קטנה /",
+    "artist": "הפרוייקט של עידן רייכל",
+    "href": "https://tab4u.com/tabs/songs/70681_%D7%94%D7%A4%D7%A8%D7%95%D7%99%D7%99%D7%A7%D7%98_%D7%A9%D7%9C_%D7%A2%D7%99%D7%93%D7%9F_%D7%A8%D7%99%D7%99%D7%9B%D7%9C_-_%D7%99%D7%9C%D7%93%D7%94_%D7%A9%D7%9C%D7%99_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/kaveret.jpg",
+    "songName": "מדינה קטנה /",
+    "artist": "כוורת",
+    "href": "https://tab4u.com/tabs/songs/6199_%D7%9B%D7%95%D7%95%D7%A8%D7%AA_-_%D7%9E%D7%93%D7%99%D7%A0%D7%94_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17079976729178.jpg",
+    "songName": "מנגינה קטנה /",
+    "artist": "בניה ברבי",
+    "href": "https://tab4u.com/tabs/songs/67919_%D7%91%D7%A0%D7%99%D7%94_%D7%91%D7%A8%D7%91%D7%99_-_%D7%9E%D7%A0%D7%92%D7%99%D7%A0%D7%94_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17082699768987.jpg",
+    "songName": "סימפוניית נישואין קטנה /",
+    "artist": "חנן יובל",
+    "href": "https://tab4u.com/tabs/songs/68006_%D7%97%D7%A0%D7%9F_%D7%99%D7%95%D7%91%D7%9C_-_%D7%A1%D7%99%D7%9E%D7%A4%D7%95%D7%A0%D7%99%D7%99%D7%AA_%D7%A0%D7%99%D7%A9%D7%95%D7%90%D7%99%D7%9F_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/yehudit_raviz.jpg",
+    "songName": "עיר קטנה /",
+    "artist": "יהודית רביץ",
+    "href": "https://tab4u.com/tabs/songs/4222_%D7%99%D7%94%D7%95%D7%93%D7%99%D7%AA_%D7%A8%D7%91%D7%99%D7%A5_-_%D7%A2%D7%99%D7%A8_%D7%A7%D7%98%D7%A0%D7%94.html"
+  },
+  {
+    "image": "/additions/artists_imgs/17082695587616.jpg",
+    "songName": "ציפור קטנה בלב /",
+    "artist": "יגאל בשן",
+    "href": "https://tab4u.com/tabs/songs/1551_%D7%99%D7%92%D7%90%D7%9C_%D7%91%D7%A9%D7%9F_-_%D7%A6%D7%99%D7%A4%D7%95%D7%A8_%D7%A7%D7%98%D7%A0%D7%94_%D7%91%D7%9C%D7%91.html"
   }
 ]
