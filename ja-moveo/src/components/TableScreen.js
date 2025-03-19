@@ -25,7 +25,7 @@ const TableScreen = () => {
             {results.length === 0 ? (
                 <div>
                     <p>No results found</p>
-                    <button onClick={() => navigate("/Home")}>Search another song</button>
+                    <button onClick={() => navigate(`/main/${sessionCode}`)}>Search another song</button>
                 </div>
             ) : (
                 <table border="1" cellPadding="10">
