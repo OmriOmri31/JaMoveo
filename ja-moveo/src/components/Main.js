@@ -74,6 +74,12 @@ const Main = () => {
                     </form>
                 </div>
             )}
+
+            {localStorage.getItem("isAdmin") === "false" && (
+                <div>
+                    <h3>Waiting for next song...</h3>
+                </div>
+            )}
         </div>
     );
 };
