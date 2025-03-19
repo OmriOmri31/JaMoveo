@@ -41,6 +41,7 @@ async function extractChords(url) {
 
 async function extractLyrics(songWithChords) {
     const chordRegex = /^(?:(?:[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?(?:\/[A-G](?:[#b])?(?:(?:maj|min|m|sus|dim|aug|add))?(?:\d+(?:[b#]\d+)?)*(?:[xX]\d+)?){0,1})|(?:[xX]\d+))$/;
+    const tabRegex = /^[eBGDAE][-\s\d|xsShHpPrR\/\\]+/;
     const lines = songWithChords.split('\n');
     const filteredLines = lines.filter(line => {
         const trimmedLine = line.trim();
@@ -48,7 +49,7 @@ async function extractLyrics(songWithChords) {
             return true;
         }
         const words = trimmedLine.split(/\s+/);
-        const isChordLine = words.every(word => chordRegex.test(word));
+        const isChordLine = words.every(word => chordRegex.test(word))||words.every(word => tabRegex.test(word));
         return !isChordLine;
     });
     return filteredLines.join('\n');
