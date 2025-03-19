@@ -41,7 +41,7 @@ async function getSongResults(songName) {
                 const image = imageMatch ? imageMatch[1].replace(/['"]/g, "") : null;
                 const songName = row.querySelector("div.sNameI19")?.innerText.trim();
                 const artist = row.querySelector("div.aNameI19")?.innerText.trim();
-                const href = a.getAttribute("href");
+                const href = "https://tab4u.com/" + a.getAttribute("href");
                 return { image, songName, artist, href };
             }).filter(item => item !== null);
         });

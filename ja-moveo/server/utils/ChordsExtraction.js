@@ -1,7 +1,12 @@
 const puppeteer = require('puppeteer');
 
-function isHebrew(text) {
-    return /[\u0590-\u05FF]/.test(text);
+function isHebrew(url) {
+    try {
+        const decodedUrl = decodeURIComponent(url);
+        return /[\u0590-\u05FF]/.test(decodedUrl);
+    } catch (error) {
+        return false;
+    }
 }
 
 async function extractChordsEnglish(url) {
