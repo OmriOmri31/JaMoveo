@@ -30,7 +30,7 @@ const LiveScreen = () => {
                 const response = await fetch('http://localhost:3001/extract', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: href })
+                    body: JSON.stringify({ url: href, instrument: localStorage.getItem("instrument") })
                 });
                 if (!response.ok) {
                     throw new Error('Extraction failed');

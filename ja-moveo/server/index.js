@@ -45,9 +45,15 @@ app.post('/create-session', async (req, res) => {
 
 app.post('/extract', async (req, res) => {
     try {
-        const { url } = req.body;
+        const { url, instrument } = req.body;
         const chordsText = await extractChords(url);
-        res.json({ chords: chordsText });
+        // If the user is a Vocal, extract and return only the lyrics.
+        if (instrument === "Vocals") {
+            const lyricsText = await extractLyrics(chordsText);
+            res.json({ chords: lyricsText });
+        } else {
+            res.json({ chords: chordsText });
+        }
     } catch (error) {
         res.status(500).json({ message: "Error extracting chords", error });
     }
@@ -170,7 +176,7 @@ app.post('/login', async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-        res.json({ message: 'Login successful', token, isAdmin: user.isAdmin, image: user.image });
+        res.json({ message: 'Login successful', token, isAdmin: user.isAdmin, image: user.image, instrument: user.instrument });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }

@@ -21,6 +21,7 @@ const LogIn = () => {
             localStorage.setItem('nickname', nickname);
             localStorage.setItem('image', data.image);
             localStorage.setItem("loggedIn", "true");
+            localStorage.setItem('instrument', data.instrument);
             localStorage.setItem('isAdmin', data.isAdmin.toString());
             data.isAdmin ? navigate("/HomeAdmin") : navigate("/Home");
         }

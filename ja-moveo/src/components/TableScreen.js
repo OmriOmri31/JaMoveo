@@ -22,22 +22,29 @@ const TableScreen = () => {
     return (
         <div style={{ margin: "20px" }}>
             <h2>Song Results</h2>
-            <table border="1" cellPadding="10">
-                <thead>
-                <tr>
-                    <th>Artist</th>
-                    <th>Song</th>
-                </tr>
-                </thead>
-                <tbody>
-                {results.map((item, index) => (
-                    <tr key={index} style={{ cursor: 'pointer' }} onClick={() => handleRowClick(item.href)}>
-                        <td>{item.artist}</td>
-                        <td>{item.songName}</td>
+            {results.length === 0 ? (
+                <div>
+                    <p>No results found</p>
+                    <button onClick={() => navigate("/Home")}>Search another song</button>
+                </div>
+            ) : (
+                <table border="1" cellPadding="10">
+                    <thead>
+                    <tr>
+                        <th>Artist</th>
+                        <th>Song</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {results.map((item, index) => (
+                        <tr key={index} style={{ cursor: 'pointer' }} onClick={() => handleRowClick(item.href)}>
+                            <td>{item.artist}</td>
+                            <td>{item.songName}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };
