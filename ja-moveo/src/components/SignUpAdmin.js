@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignUpAdmin = () => {
     // State variables
@@ -8,8 +8,8 @@ const SignUpAdmin = () => {
     const [selectedBuiltInImage, setSelectedBuiltInImage] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null);
     const [instrument, setInstrument] = useState('');
+    // Here isAdmin is preset to true for admins
     const [isAdmin, setIsAdmin] = useState(true);
-
     const navigate = useNavigate();
 
     // Built-in images array
@@ -23,31 +23,46 @@ const SignUpAdmin = () => {
 
     // Handle form submission
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent page refresh
-        await handleRegister(); // Call register function
+        e.preventDefault();
+        await handleRegister();
     };
 
-    // Send form data to backend
+    // Send form data to backend and auto log in on success
     const handleRegister = async () => {
         try {
             const response = await fetch('http://localhost:3001/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     nickname,
                     password,
                     instrument,
                     isAdmin,
-                    image: selectedBuiltInImage
+                    image: uploadedImage ? uploadedImage : selectedBuiltInImage
                 })
             });
 
             const data = await response.json();
             if (response.ok) {
-                alert('Registration successful!');
-                navigate("/HomeAdmin")
+                // Automatically log in after successful registration
+                const loginResponse = await fetch("http://localhost:3001/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nickname, password }),
+                });
+                const loginData = await loginResponse.json();
+                if (loginResponse.ok) {
+                    localStorage.setItem('token', loginData.token);
+                    localStorage.setItem('nickname', nickname);
+                    localStorage.setItem('image', loginData.image);
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem('instrument', loginData.instrument);
+                    localStorage.setItem('isAdmin', loginData.isAdmin.toString());
+                    alert('Registration successful!');
+                    navigate("/HomeAdmin");
+                } else {
+                    alert("Registration succeeded, but login failed. Please try logging in.");
+                }
             } else {
                 alert(data.message || 'Registration failed');
             }
@@ -57,11 +72,16 @@ const SignUpAdmin = () => {
         }
     };
 
-    // Handle image selection
+    // Handle image selection: convert file to base64 string
     const handleImageUpload = (e) => {
         if (e.target.files && e.target.files[0]) {
-            setUploadedImage(e.target.files[0]);
-            setSelectedBuiltInImage('');
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setUploadedImage(reader.result);
+                setSelectedBuiltInImage('');
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -72,84 +92,79 @@ const SignUpAdmin = () => {
     };
 
     return (
-        <div style={{ margin: '20px' }}>
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
-                {/* Button to go to Admin Signup */}
+        <div className="sign-up-container">
+            <h2 className="sign-up-title">Sign Up</h2>
+            <form className="sign-up-form" onSubmit={handleSubmit}>
                 <button type="button" onClick={() => window.location.href = "/"}>
                     Sign Up as a Simple User
                 </button>
-                {/* Nickname Input Field */}
-                <div>
-                    <label>
-                        Nickname:
-                        <input
-                            type="text"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
-                            placeholder="Enter your nickname"
-                            required
-                        />
-                    </label>
-                </div>
-                {/* Password Input Field */}
-                <div>
-                    <label>
-                        Password:
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            required
-                        />
-                    </label>
-                </div>
-                <br/>
+
+                <label>
+                    Nickname:
+                    <input
+                        type="text"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                        placeholder="Enter your nickname"
+                        required
+                    />
+                </label>
+
+                <label>
+                    Password:
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                        required
+                    />
+                </label>
+
                 {/* Image Selection Section */}
-                <div>
+                <div className="image-selection">
                     <label>Choose an Image:</label>
-                    <div style={{ display: 'flex', gap: '10px' }}>
+                    <div className="built-in-image-grid">
                         {builtInImages.map((img, index) => (
                             <div
                                 key={index}
                                 onClick={() => handleBuiltInImageSelect(img)}
-                                style={{
-                                    border: selectedBuiltInImage === img ? '2px solid blue' : '1px solid gray',
-                                    padding: '5px',
-                                    cursor: 'pointer'
-                                }}
+                                className={`built-in-image-box ${selectedBuiltInImage === img ? 'selected' : ''}`}
                             >
-                                <img src={img} alt={`Built-in ${index + 1}`} style={{ width: '100px', height: '100px' }} />
+                                <img src={img} alt={`Built-in ${index + 1}`} />
                             </div>
                         ))}
                     </div>
-                    {/* Option to upload an image */}
-                    <div>
+
+                    {/* Upload container to display user-uploaded image preview */}
+                    <div className="upload-container">
                         <label>
                             Or Upload an Image:
                             <input type="file" accept="image/*" onChange={handleImageUpload} />
                         </label>
+                        {uploadedImage && (
+                            <img src={uploadedImage} alt="Uploaded" />
+                        )}
                     </div>
                 </div>
-                <br/>
-                {/* Instrument Dropdown */}
-                <div>
-                    <label>
-                        Instrument:
-                        <select value={instrument} onChange={(e) => setInstrument(e.target.value)} required>
-                            <option value="">Select your instrument</option>
-                            <option value="Guitar">Guitar</option>
-                            <option value="Bass">Bass</option>
-                            <option value="Drums">Drums</option>
-                            <option value="Saxophone">Saxophone</option>
-                            <option value="Piano">Keyboard</option>
-                            <option value="Vocals">Vocals</option>
-                        </select>
-                    </label>
-                </div>
-                <br/>
-                {/* Submit button */}
+
+                <label>
+                    Instrument:
+                    <select
+                        value={instrument}
+                        onChange={(e) => setInstrument(e.target.value)}
+                        required
+                    >
+                        <option value="">Select your instrument</option>
+                        <option value="Guitar">Guitar</option>
+                        <option value="Bass">Bass</option>
+                        <option value="Drums">Drums</option>
+                        <option value="Saxophone">Saxophone</option>
+                        <option value="Piano">Keyboard</option>
+                        <option value="Vocals">Vocals</option>
+                    </select>
+                </label>
+
                 <button type="submit">Sign Up</button>
             </form>
         </div>

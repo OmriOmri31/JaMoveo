@@ -31,9 +31,7 @@ const SignUp = () => {
         try {
             const registerResponse = await fetch('http://localhost:3001/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     nickname,
                     password,
@@ -54,6 +52,7 @@ const SignUp = () => {
                 });
                 const loginData = await loginResponse.json();
                 if (loginResponse.ok) {
+                    // Set localStorage items
                     localStorage.setItem('token', loginData.token);
                     localStorage.setItem('nickname', nickname);
                     localStorage.setItem('image', loginData.image);
@@ -61,7 +60,12 @@ const SignUp = () => {
                     localStorage.setItem('instrument', loginData.instrument);
                     localStorage.setItem('isAdmin', loginData.isAdmin.toString());
                     alert('Registration successful!');
-                    navigate("/Home");
+                    // Navigate based on user role
+                    if (loginData.isAdmin) {
+                        navigate("/HomeAdmin");
+                    } else {
+                        navigate("/Home");
+                    }
                 } else {
                     alert("Registration succeeded, but login failed. Please try logging in.");
                 }
@@ -98,10 +102,7 @@ const SignUp = () => {
             <h2 className="sign-up-title">Sign Up</h2>
             <form className="sign-up-form" onSubmit={handleSubmit}>
                 {/* Button to go to Admin Signup */}
-                <button
-                    type="button"
-                    onClick={() => window.location.href = "/ImTheBoss"}
-                >
+                <button type="button" onClick={() => window.location.href = "/ImTheBoss"}>
                     Sign Up as Admin
                 </button>
 
@@ -151,10 +152,7 @@ const SignUp = () => {
                             <input type="file" accept="image/*" onChange={handleImageUpload} />
                         </label>
                         {uploadedImage && (
-                            <img
-                                src={uploadedImage}
-                                alt="Uploaded"
-                            />
+                            <img src={uploadedImage} alt="Uploaded" />
                         )}
                     </div>
                 </div>
