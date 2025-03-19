@@ -9,7 +9,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User'); // Import User model
-const {getSongResults} = require("./utils/ResultsPage");
+const { getSongResults } = require("./utils/ResultsPage");
+const { extractChords, extractLyrics } = require("./utils/ChordsExtraction");
 
 // Initialize Express and create HTTP server
 const app = express();
@@ -42,6 +43,16 @@ app.post('/create-session', async (req, res) => {
         res.status(201).json({ code });
     } catch (error) {
         res.status(500).json({ message: "Error creating session", error });
+    }
+});
+
+app.post('/extract', async (req, res) => {
+    try {
+        const { url } = req.body;
+        const chordsText = await extractChords(url);
+        res.json({ chords: chordsText });
+    } catch (error) {
+        res.status(500).json({ message: "Error extracting chords", error });
     }
 });
 
