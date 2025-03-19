@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import socket from '../socket';
+// src/components/TableScreen.js
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import socket from "../socket";
 
 const TableScreen = () => {
     const location = useLocation();
@@ -9,9 +10,12 @@ const TableScreen = () => {
     const sessionCode = localStorage.getItem("sessionCode");
 
     useEffect(() => {
-        if(sessionCode){
-            // Rejoin the room if necessary when on TableScreen
-            socket.emit("joinLobby", { room: `Main/${sessionCode}`, user: localStorage.getItem('nickname') });
+        if (sessionCode) {
+            // Rejoin the lobby if necessary
+            socket.emit("joinLobby", {
+                room: `Main/${sessionCode}`,
+                user: localStorage.getItem("nickname"),
+            });
         }
     }, [sessionCode]);
 
@@ -20,15 +24,20 @@ const TableScreen = () => {
     };
 
     return (
-        <div style={{ margin: "20px" }}>
-            <h2>Song Results</h2>
+        <div className="page-container">
+            <h2 className="page-title">Song Results</h2>
             {results.length === 0 ? (
-                <div>
-                    <p>No results found</p>
-                    <button onClick={() => navigate(`/main/${sessionCode}`)}>Search another song</button>
+                <div className="no-results">
+                    <p className="no-results-text">No results found</p>
+                    <button
+                        className="primary-button"
+                        onClick={() => navigate(`/main/${sessionCode}`)}
+                    >
+                        Search another song
+                    </button>
                 </div>
             ) : (
-                <table border="1" cellPadding="10">
+                <table className="results-table">
                     <thead>
                     <tr>
                         <th>Artist</th>
@@ -37,7 +46,11 @@ const TableScreen = () => {
                     </thead>
                     <tbody>
                     {results.map((item, index) => (
-                        <tr key={index} style={{ cursor: 'pointer' }} onClick={() => handleRowClick(item.href)}>
+                        <tr
+                            key={index}
+                            className="table-row"
+                            onClick={() => handleRowClick(item.href)}
+                        >
                             <td>{item.artist}</td>
                             <td>{item.songName}</td>
                         </tr>

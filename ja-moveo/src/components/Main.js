@@ -1,3 +1,4 @@
+// src/components/Main.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
@@ -31,7 +32,11 @@ const Main = () => {
         checkSession();
 
         // Join the session room; pass isAdmin flag from localStorage
-        socket.emit("joinLobby", { room: `Main/${code}`, user: localStorage.getItem('nickname'), isAdmin: localStorage.getItem("isAdmin") === "true" });
+        socket.emit("joinLobby", {
+            room: `Main/${code}`,
+            user: localStorage.getItem("nickname"),
+            isAdmin: localStorage.getItem("isAdmin") === "true",
+        });
 
         socket.on("updateUsers", (users) => {
             setActiveUsers(users);
@@ -48,47 +53,54 @@ const Main = () => {
         socket.emit("closeSession", { room: `Main/${code}` });
     };
 
+    // Handler for song search submission
+    const handleSearchSubmit = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:3001/results", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ songName: query }),
+        });
+        const data = await response.json();
+        // Navigate to TableScreen with the search results.
+        navigate("/table", { state: { results: data.results } });
+    };
+
     return (
-        <div style={{ margin: "20px" }}>
-            <h2>Main Page {code}</h2>
-            <h3>Active Users:</h3>
-            <ul>
+        <div className="page-container">
+            <h2 className="page-title">Main Page {code}</h2>
+            <h3 className="section-title">Active Users:</h3>
+            <ul className="active-users-list">
                 {activeUsers.map((user) => (
-                    <li key={user.id}>{user.name}</li>
+                    <li key={user.id} className="active-user-item">
+                        {user.name}
+                    </li>
                 ))}
             </ul>
-            {localStorage.getItem("isAdmin") === "true" && (
-                <div>
-                    <h3>Search any song...</h3>
-                    <form
-                        onSubmit={async (e) => {
-                            e.preventDefault();
-                            const response = await fetch("http://localhost:3001/results", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ songName: query }),
-                            });
-                            const data = await response.json();
-                            // Navigate to TableScreen with the search results.
-                            navigate('/table', { state: { results: data.results } });
-                        }}
-                    >
+
+            {localStorage.getItem("isAdmin") === "true" ? (
+                <div className="admin-section">
+                    <h3 className="section-title">Search any song...</h3>
+                    <form className="page-form" onSubmit={handleSearchSubmit}>
                         <input
                             type="text"
                             placeholder="Enter song title"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            required
                         />
-                        <button type="submit">Search</button>
+                        <button type="submit" className="primary-button">
+                            Search
+                        </button>
                     </form>
                     <br />
-                    <button onClick={handleCloseSession}>Close Session</button>
+                    <button onClick={handleCloseSession} className="primary-button">
+                        Close Session
+                    </button>
                 </div>
-            )}
-
-            {localStorage.getItem("isAdmin") === "false" && (
-                <div>
-                    <h3>Waiting for next song...</h3>
+            ) : (
+                <div className="user-section">
+                    <h3 className="section-title">Waiting for next song...</h3>
                 </div>
             )}
         </div>

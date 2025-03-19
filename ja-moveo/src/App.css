@@ -259,4 +259,134 @@ button:hover {
 .primary-button:hover {
   background-color: #404D67;
 }
+/* Common Page Container */
+.page-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: #FFFFFF;
+  padding: 40px;
+  border: 1px solid #ccc;
+  border-radius: 0; /* Sharp corners */
+  text-align: center;
+}
+
+/* Page Title */
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #181818;
+  margin-bottom: 2rem;
+}
+
+/* TableScreen Specific Styles */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.2rem;
+}
+
+.results-table th,
+.results-table td {
+  border: 2px solid #181818;
+  padding: 16px;
+}
+
+.results-table th {
+  background-color: #983732;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+.table-row {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.table-row:hover {
+  background-color: #F9F9F9;
+}
+
+.no-results-text {
+  font-size: 1.5rem;
+  color: #181818;
+  margin-bottom: 1rem;
+}
+
+/* Button Styles */
+.primary-button {
+  background-color: #983732;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 0.3s ease;
+}
+
+.primary-button:hover {
+  background-color: #404D67;
+}
+
+/* LiveScreen Specific Styles */
+.live-container {
+  padding-bottom: 100px;
+}
+
+.chords-display {
+  font-size: 1.5rem;
+  color: #181818;
+  background-color: #F9F9F9;
+  padding: 20px;
+  border: 2px solid #983732;
+  margin-top: 20px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.error-text {
+  font-size: 1.5rem;
+  color: #983732;
+  margin-top: 20px;
+}
+
+/* Fixed Buttons for LiveScreen */
+.fixed-button {
+  position: fixed;
+  padding: 10px 20px;
+  z-index: 1000;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 0.3s ease;
+}
+
+.auto-scroll-button {
+  bottom: 20px;
+  right: 20px;
+  background-color: #983732;
+  color: #FFFFFF;
+}
+
+.auto-scroll-button:hover {
+  background-color: #404D67;
+}
+
+.quit-button {
+  bottom: 20px;
+  left: 20px;
+  background-color: #983732;
+  color: #FFFFFF;
+}
+
+.quit-button:hover {
+  background-color: #404D67;
+}
 

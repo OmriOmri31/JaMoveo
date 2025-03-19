@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import socket from '../socket';
+// src/components/LiveScreen.js
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import socket from "../socket";
 
 const LiveScreen = () => {
     const { code } = useParams();
     const location = useLocation();
-    const { href } = location.state || { href: '' };
-    const [chords, setChords] = useState('');
+    const { href } = location.state || { href: "" };
+    const [chords, setChords] = useState("");
     const [error, setError] = useState(null);
     const [autoScroll, setAutoScroll] = useState(false);
 
-    // Auto-scroll effect when enabled (only active if chords are loaded)
+    // Auto-scroll effect when enabled
     useEffect(() => {
         let scrollInterval;
         if (autoScroll) {
             scrollInterval = setInterval(() => {
-                window.scrollBy(0, 1); // scroll down by 1px every 50ms
+                window.scrollBy(0, 1);
             }, 50);
         }
         return () => {
@@ -23,17 +24,20 @@ const LiveScreen = () => {
         };
     }, [autoScroll]);
 
-    // Fetch chords and, if admin, signal redirection for all users
+    // Fetch chords and signal live redirection if admin
     useEffect(() => {
         const fetchChords = async () => {
             try {
-                const response = await fetch('http://localhost:3001/extract', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: href, instrument: localStorage.getItem("instrument") })
+                const response = await fetch("http://localhost:3001/extract", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        url: href,
+                        instrument: localStorage.getItem("instrument"),
+                    }),
                 });
                 if (!response.ok) {
-                    throw new Error('Extraction failed');
+                    throw new Error("Extraction failed");
                 }
                 const data = await response.json();
                 setChords(data.chords);
@@ -45,14 +49,14 @@ const LiveScreen = () => {
         if (href) {
             fetchChords();
         }
-        // If admin, immediately signal all users to redirect to live view.
+        // If admin, signal all users to redirect to live view
         if (localStorage.getItem("isAdmin") === "true" && href) {
             socket.emit("redirectLive", { room: `Main/${code}`, href });
         }
     }, [href, code]);
 
     const toggleAutoScroll = () => {
-        setAutoScroll(prev => !prev);
+        setAutoScroll((prev) => !prev);
     };
 
     const handleQuit = () => {
@@ -60,36 +64,20 @@ const LiveScreen = () => {
     };
 
     return (
-        <div style={{ margin: "20px", paddingBottom: "80px" }}>
-            <h2>Live Chords</h2>
-            {error ? <p>{error}</p> : <pre>{chords}</pre>}
-            {/* Floating auto-scroll toggle button only shows when chords are loaded */}
+        <div className="page-container live-container">
+            <h2 className="page-title">Live Chords</h2>
+            {error ? (
+                <p className="error-text">{error}</p>
+            ) : (
+                <pre className="chords-display">{chords}</pre>
+            )}
             {chords && (
-                <button
-                    onClick={toggleAutoScroll}
-                    style={{
-                        position: 'fixed',
-                        bottom: '20px',
-                        right: '20px',
-                        padding: '10px 20px',
-                        zIndex: 1000
-                    }}
-                >
-                    {autoScroll ? 'Stop Auto Scroll' : 'Start Auto Scroll'}
+                <button className="fixed-button auto-scroll-button" onClick={toggleAutoScroll}>
+                    {autoScroll ? "Stop Auto Scroll" : "Start Auto Scroll"}
                 </button>
             )}
-            {/* Floating QUIT button for admin users */}
             {localStorage.getItem("isAdmin") === "true" && (
-                <button
-                    onClick={handleQuit}
-                    style={{
-                        position: 'fixed',
-                        bottom: '20px',
-                        left: '20px',
-                        padding: '10px 20px',
-                        zIndex: 1000
-                    }}
-                >
+                <button className="fixed-button quit-button" onClick={handleQuit}>
                     QUIT
                 </button>
             )}
