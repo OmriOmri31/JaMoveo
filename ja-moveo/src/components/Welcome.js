@@ -1,32 +1,32 @@
-//import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-
+// src/components/Welcome.js
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
     const navigate = useNavigate();
-    if ( localStorage.getItem("loggedIn") === "true"){
-        if ( localStorage.getItem("isAdmin") === "true"){
+
+    // If logged in, redirect accordingly
+    if (localStorage.getItem("loggedIn") === "true") {
+        if (localStorage.getItem("isAdmin") === "true") {
             navigate("/HomeAdmin");
-        }
-        else
+        } else {
             navigate("/Home");
+        }
     }
 
     return (
-        <div style={{margin: '20px'}}>
-            <h1>Welcome to JaMoveo!</h1>
-
-            {/* Button to go to Signup */}
-            <h5>First time here?</h5>
-            <button type="button" onClick={() => window.location.href = "/SignUp"}>
-                Sign Up
-            </button>
-            <h5>Professional jammer?</h5>
-            <button type="button" onClick={() => window.location.href = "/LogIn"}>
-                Log In
-            </button>
-
-            <br/>
+        <div className="welcome-container">
+            <h1 className="welcome-title">Welcome to JaMoveo!</h1>
+            <div className="welcome-buttons">
+                <h5 className="welcome-subtitle">First time here?</h5>
+                <button className="primary-button" onClick={() => navigate("/SignUp")}>
+                    Sign Up
+                </button>
+                <h5 className="welcome-subtitle">Professional jammer?</h5>
+                <button className="primary-button" onClick={() => navigate("/LogIn")}>
+                    Log In
+                </button>
+            </div>
         </div>
     );
 };

@@ -211,4 +211,52 @@ button:hover {
   flex-direction: column;
   gap: 1rem;
 }
+/* Welcome Screen Styles */
+.welcome-container {
+  max-width: 600px;
+  margin: 60px auto;
+  background-color: #FFFFFF;
+  padding: 40px;
+  border: 1px solid #ccc;
+  border-radius: 0; /* Sharp corners */
+  text-align: center;
+}
+
+.welcome-title {
+  font-size: 3rem; /* Large hero text */
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #181818;
+  margin-bottom: 2rem;
+}
+
+.welcome-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #181818;
+  margin-bottom: 0.5rem;
+}
+
+.primary-button {
+  background-color: #983732;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0; /* Sharp corners */
+}
+
+.primary-button:hover {
+  background-color: #404D67;
+}
 
