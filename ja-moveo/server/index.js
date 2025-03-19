@@ -155,6 +155,7 @@ app.post('/register', async (req, res) => {
         const existingUser = await User.findOne({ nickname });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
         const hashedPassword = await bcrypt.hash(password, 10);
+        // 'image' can be either a built-in URL or a base64 encoded string
         const newUser = new User({ nickname, password: hashedPassword, instrument, isAdmin, image });
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully!' });
@@ -163,7 +164,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Login Route (POST /LogIn)
+// Login Route (POST /login)
 app.post('/login', async (req, res) => {
     try {
         const { nickname, password } = req.body;

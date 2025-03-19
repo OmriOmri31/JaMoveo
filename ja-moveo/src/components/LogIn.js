@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 const LogIn = () => {
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
-    //const [loggedIn, setLoggedIn] = useState(false);
 
     const navigate = useNavigate();
 
@@ -16,7 +15,7 @@ const LogIn = () => {
             body: JSON.stringify({ nickname, password }),
         });
         const data = await response.json();
-        if(response.ok) {
+        if (response.ok) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('nickname', nickname);
             localStorage.setItem('image', data.image);
@@ -24,14 +23,27 @@ const LogIn = () => {
             localStorage.setItem('instrument', data.instrument);
             localStorage.setItem('isAdmin', data.isAdmin.toString());
             data.isAdmin ? navigate("/HomeAdmin") : navigate("/Home");
+        } else {
+            alert("Try Again!");
         }
-        else alert("Try Again!");
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} required />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+                type="text"
+                placeholder="Nickname"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                required
+            />
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
             <button type="submit">Log In</button>
         </form>
     );

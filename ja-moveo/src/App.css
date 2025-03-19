@@ -1,31 +1,43 @@
+/* App.css */
+
+/* 1) Import Montserrat font */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700&display=swap');
+
+/* 2) Global Reset & Base Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #F9F9F9; /* Secondary palette background */
+  color: #181818;           /* Primary text color (black) */
+}
+
+/* 3) Main App Container */
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
+/* 4) Header */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #983732; /* Primary brand color (brown-burgundy) */
+  min-height: 15vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-weight: 500; /* Medium weight for headings */
 }
 
-.App-link {
-  color: #61dafb;
+/* 5) App Logo (optional spinning animation) */
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +47,140 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* 6) Links */
+.App-link {
+  color: #404D67; /* Secondary palette (blue) */
+  text-decoration: none;
+  font-weight: 500; /* Medium */
+  transition: color 0.3s ease;
+}
+
+.App-link:hover {
+  color: #FFFFFF; /* Hover to white */
+}
+
+/* 7) Buttons (Global) */
+button {
+  background-color: #983732; /* Primary brand color */
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;  /* Medium */
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  border-radius: 0; /* Sharp corners */
+}
+
+button:hover {
+  background-color: #404D67; /* Secondary brand color */
+}
+
+/* 8) Sign-Up Form Container */
+.sign-up-container {
+  max-width: 500px;
+  margin: 40px auto;       /* Centers the container on the page */
+  background-color: #FFFFFF;
+  padding: 40px;
+  border: 1px solid #ccc;
+  border-radius: 0;        /* Keep corners sharp */
+  text-align: center;      /* Center text & elements inside */
+}
+
+/* 9) Sign-Up Title */
+.sign-up-title {
+  font-size: 2rem;         /* Example for H2 styling */
+  font-weight: 500;        /* Medium */
+  text-transform: uppercase;
+  color: #181818;
+  margin-bottom: 1.5rem;
+}
+
+/* 10) Sign-Up Form Layout */
+.sign-up-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* Keep form fields/buttons centered */
+  gap: 1rem;
+}
+
+/* Labels, Inputs, and Selects */
+.sign-up-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;         /* Light/Regular */
+  margin-bottom: 0.5rem;
+  text-align: left;         /* Label text left-aligned for clarity */
+  width: 100%;
+}
+
+.sign-up-form input,
+.sign-up-form select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #404D67;
+  border-radius: 0;         /* Sharp corners */
+  outline: none;
+}
+
+/* 11) Image Selection Section */
+.image-selection {
+  width: 100%;
+  text-align: left;         /* Ensures the image grid is flush to the left */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.built-in-image-grid {
+  display: flex;
+  flex-wrap: wrap;          /* Wrap if there's not enough space */
+  gap: 1rem;
+  justify-content: flex-start; /* Align built-in images to the left */
+}
+
+/* Built-in images (circular + border) */
+.built-in-image-box {
+  padding: 2px;
+  cursor: pointer;
+}
+
+.built-in-image-box img {
+  width: 8vw;               /* Responsive width */
+  max-width: 60px;          /* Prevent overly large images */
+  aspect-ratio: 1 / 1;      /* Keeps image square */
+  object-fit: cover;
+  border-radius: 50%;       /* Circular shape */
+  box-shadow: 0 0 0 2px #ccc;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Highlight the selected image more visibly */
+.built-in-image-box.selected img {
+  box-shadow: 0 0 0 3px #404D67;
+}
+
+/* 12) Upload Container (file input + preview image) */
+.upload-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.upload-container img {
+  width: 8vw;
+  max-width: 60px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #ccc;
 }
