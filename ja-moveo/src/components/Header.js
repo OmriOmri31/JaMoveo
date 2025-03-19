@@ -6,7 +6,6 @@ const Header = () => {
     const navigate = useNavigate();
     const nickname = localStorage.getItem("nickname");
     const image = localStorage.getItem("image");
-    //const instrument = localStorage.getItem("instrument")
 
     const handleLogout = () => {
         localStorage.clear();
@@ -19,8 +18,9 @@ const Header = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "10px",
-                background: "#eee",
+                padding: "10px 20px",
+                backgroundColor: "#F9F9F9", // Secondary palette background
+                borderBottom: "2px solid #983732" // Accent with primary brand color
             }}
         >
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -33,12 +33,38 @@ const Header = () => {
                             height: "50px",
                             borderRadius: "50%",
                             marginRight: "10px",
+                            objectFit: "cover"
                         }}
                     />
                 )}
-                <h3>{nickname ? `Welcome, ${nickname}` : "Welcome"}</h3>
+                <h3
+                    style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontWeight: 500,
+                        textTransform: "uppercase",
+                        color: "#181818",
+                        margin: 0,
+                        fontSize: "1.2rem"
+                    }}
+                >
+                    {nickname ? `Welcome, ${nickname}` : "Welcome"}
+                </h3>
             </div>
-            <button onClick={handleLogout}>Logout</button>
+            <button
+                onClick={handleLogout}
+                style={{
+                    backgroundColor: "#983732",
+                    color: "#FFFFFF",
+                    border: "none",
+                    padding: "8px 16px",
+                    fontWeight: 500,
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    borderRadius: "0"
+                }}
+            >
+                Logout
+            </button>
         </header>
     );
 };

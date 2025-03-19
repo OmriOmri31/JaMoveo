@@ -6,7 +6,6 @@ const Home = () => {
     const [code, setCode] = useState("");
     const navigate = useNavigate();
 
-    // On form submit, navigate to the corresponding lobby route
     const handleSubmit = (e) => {
         e.preventDefault();
         if (code.trim()) {
@@ -17,9 +16,9 @@ const Home = () => {
     };
 
     return (
-        <div style={{ margin: "20px" }}>
-            <h2>Enter Session Code</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="page-container">
+            <h2 className="page-title">Enter Session Code</h2>
+            <form className="page-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="Enter session code"

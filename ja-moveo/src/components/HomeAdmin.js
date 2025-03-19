@@ -1,10 +1,10 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/components/HomeAdmin.js
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomeAdmin = () => {
     const navigate = useNavigate();
 
-    // When clicked, call the server to create a session and then navigate to that lobby.
     const createJamSession = async () => {
         try {
             const res = await fetch("http://localhost:3001/create-session", {
@@ -22,10 +22,13 @@ const HomeAdmin = () => {
             alert("Server error");
         }
     };
+
     return (
-        <div style={{ margin: "20px" }}>
-            <button onClick={createJamSession}>Create a jam session</button>
+        <div className="page-container">
+            <h2 className="page-title">Admin Dashboard</h2>
+            <button onClick={createJamSession}>Create a Jam Session</button>
         </div>
     );
 };
+
 export default HomeAdmin;
