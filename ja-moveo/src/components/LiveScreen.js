@@ -10,7 +10,7 @@ const LiveScreen = () => {
     const [error, setError] = useState(null);
     const [autoScroll, setAutoScroll] = useState(false);
 
-    // Handle auto scrolling effect when enabled
+    // Auto-scroll effect when enabled (only active if chords are loaded)
     useEffect(() => {
         let scrollInterval;
         if (autoScroll) {
@@ -23,7 +23,7 @@ const LiveScreen = () => {
         };
     }, [autoScroll]);
 
-    // Fetch chords and signal redirection for admin users
+    // Fetch chords and, if admin, signal redirection for all users
     useEffect(() => {
         const fetchChords = async () => {
             try {
@@ -45,7 +45,7 @@ const LiveScreen = () => {
         if (href) {
             fetchChords();
         }
-        // If admin, immediately signal all users to redirect to the live view.
+        // If admin, immediately signal all users to redirect to live view.
         if (localStorage.getItem("isAdmin") === "true" && href) {
             socket.emit("redirectLive", { room: `Main/${code}`, href });
         }
@@ -63,19 +63,21 @@ const LiveScreen = () => {
         <div style={{ margin: "20px", paddingBottom: "80px" }}>
             <h2>Live Chords</h2>
             {error ? <p>{error}</p> : <pre>{chords}</pre>}
-            {/* Floating toggle button for auto scrolling */}
-            <button
-                onClick={toggleAutoScroll}
-                style={{
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    padding: '10px 20px',
-                    zIndex: 1000
-                }}
-            >
-                {autoScroll ? 'Stop Auto Scroll' : 'Start Auto Scroll'}
-            </button>
+            {/* Floating auto-scroll toggle button only shows when chords are loaded */}
+            {chords && (
+                <button
+                    onClick={toggleAutoScroll}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        padding: '10px 20px',
+                        zIndex: 1000
+                    }}
+                >
+                    {autoScroll ? 'Stop Auto Scroll' : 'Start Auto Scroll'}
+                </button>
+            )}
             {/* Floating QUIT button for admin users */}
             {localStorage.getItem("isAdmin") === "true" && (
                 <button

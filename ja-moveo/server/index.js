@@ -87,22 +87,36 @@ io.on('connection', (socket) => {
     });
 
     // When admin explicitly closes the session
-    socket.on('closeSession', ({ room }) => {
+    socket.on('closeSession', async ({ room }) => {
         if (adminForRoom[room] === socket.id) {
             io.in(room).emit('sessionClosed');
             delete lobbyUsers[room];
             delete adminForRoom[room];
+            // Extract session code from room (room format: "Main/<code>")
+            const sessionCode = room.split("/")[1];
+            try {
+                await Session.deleteOne({ code: sessionCode });
+                console.log(`Session ${sessionCode} deleted from DB.`);
+            } catch (err) {
+                console.error(`Failed to delete session ${sessionCode}`, err);
+            }
         }
     });
 
-    socket.on('disconnect', () => {
-        // Check for every room the socket was in
+    socket.on('disconnect', async () => {
         for (const room in lobbyUsers) {
             // If the disconnecting socket is the admin, close the session.
             if (adminForRoom[room] === socket.id) {
                 io.in(room).emit('sessionClosed');
                 delete lobbyUsers[room];
                 delete adminForRoom[room];
+                const sessionCode = room.split("/")[1];
+                try {
+                    await Session.deleteOne({ code: sessionCode });
+                    console.log(`Session ${sessionCode} deleted from DB on admin disconnect.`);
+                } catch (err) {
+                    console.error(`Failed to delete session ${sessionCode} on admin disconnect`, err);
+                }
             } else {
                 // Otherwise, just remove the user from the room
                 lobbyUsers[room] = lobbyUsers[room].filter(u => u.id !== socket.id);
