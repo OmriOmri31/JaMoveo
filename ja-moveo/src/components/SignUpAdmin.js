@@ -24,7 +24,12 @@ const SignUpAdmin = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleRegister();
+        if (password.length < 6){
+            alert(`The password must be at least 6 characters long`)
+        }
+        else{
+            await handleRegister();
+        }
     };
 
     // Send form data to backend and auto log in on success
