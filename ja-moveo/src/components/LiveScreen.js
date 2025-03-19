@@ -1,4 +1,3 @@
-// src/components/LiveScreen.js
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import socket from "../socket";
@@ -63,7 +62,7 @@ const LiveScreen = () => {
         socket.emit("closeSession", { room: `Main/${code}` });
     };
 
-    // Determine text alignment based on whether chords contain any Hebrew characters
+    // Determine text alignment based on whether chords contain Hebrew characters
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
 
     return (
@@ -71,13 +70,33 @@ const LiveScreen = () => {
             <h2 className="page-title">Live Chords</h2>
             {error ? (
                 <p className="error-text">{error}</p>
+            ) : chords ? (
+                <pre
+                    className="chords-display"
+                    style={{ textAlign: isHebrew ? "right" : "left" }}
+                >
+          {chords}
+        </pre>
             ) : (
-                <pre className="chords-display" style={{ textAlign: isHebrew ? "right" : "left" }}>
-                    {chords}
-                </pre>
+                // Show loader when waiting for chords
+                <div className="loader-wrapper">
+                    <div className="loader">
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                        <div className="loader-square"></div>
+                    </div>
+                </div>
             )}
             {chords && (
-                <button className="fixed-button auto-scroll-button" onClick={toggleAutoScroll}>
+                <button
+                    className="fixed-button auto-scroll-button"
+                    onClick={toggleAutoScroll}
+                >
                     {autoScroll ? "Stop Auto Scroll" : "Start Auto Scroll"}
                 </button>
             )}

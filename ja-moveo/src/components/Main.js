@@ -1,4 +1,3 @@
-// src/components/Main.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
@@ -8,8 +7,9 @@ const Main = () => {
     const navigate = useNavigate();
     const [activeUsers, setActiveUsers] = useState([]);
     const [query, setQuery] = useState("");
+    const [loading, setLoading] = useState(false); // NEW: Loading state
 
-    // Save the session code so other pages can use it
+    // Save session code for use in other pages
     localStorage.setItem("sessionCode", code);
 
     useEffect(() => {
@@ -56,13 +56,15 @@ const Main = () => {
     // Handler for song search submission
     const handleSearchSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Show loader while waiting for results
         const response = await fetch("http://localhost:3001/results", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ songName: query }),
         });
         const data = await response.json();
-        // Navigate to TableScreen with the search results.
+        setLoading(false); // Hide loader
+        // Navigate to TableScreen with the search results
         navigate("/table", { state: { results: data.results } });
     };
 
@@ -81,18 +83,35 @@ const Main = () => {
             {localStorage.getItem("isAdmin") === "true" ? (
                 <div className="admin-section">
                     <h3 className="section-title">Search any song...</h3>
-                    <form className="page-form" onSubmit={handleSearchSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Enter song title"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            required
-                        />
-                        <button type="submit" className="primary-button">
-                            Search
-                        </button>
-                    </form>
+                    {loading ? (
+                            // Show loader for admin when waiting for search results
+                        <div className="loader-wrapper">
+                            <h3 className="section-title">Searching for your song's chords...</h3>
+                            <div className="loader">
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                                <div className="loader-square"></div>
+                            </div>
+                        </div>
+                    ) : (
+                        <form className="page-form" onSubmit={handleSearchSubmit}>
+                            <input
+                                type="text"
+                                placeholder="Enter song title"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                required
+                            />
+                            <button type="submit" className="primary-button">
+                                Search
+                            </button>
+                        </form>
+                    )}
                     <br />
                     <button onClick={handleCloseSession} className="primary-button">
                         Close Session
@@ -100,7 +119,21 @@ const Main = () => {
                 </div>
             ) : (
                 <div className="user-section">
-                    <h3 className="section-title">Waiting for next song...</h3>
+                    <h3 className="section-title">
+                        Waiting for your boss to pick a song to jam
+                    </h3>
+                    <div className="loader-wrapper">
+                        <div className="loader">
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                            <div className="loader-square"></div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
