@@ -23,12 +23,18 @@ const SignUp = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleRegister();
+        if (password.length < 6){
+            alert(`The password must be at least 6 characters long`)
+            }
+        else{
+            await handleRegister();
+        }
     };
 
     // Send registration data to backend and auto log in on success
     const handleRegister = async () => {
         try {
+
             const registerResponse = await fetch('http://localhost:3001/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
