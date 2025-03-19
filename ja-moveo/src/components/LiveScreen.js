@@ -63,13 +63,18 @@ const LiveScreen = () => {
         socket.emit("closeSession", { room: `Main/${code}` });
     };
 
+    // Determine text alignment based on whether chords contain any Hebrew characters
+    const isHebrew = /[\u0590-\u05FF]/.test(chords);
+
     return (
         <div className="page-container live-container">
             <h2 className="page-title">Live Chords</h2>
             {error ? (
                 <p className="error-text">{error}</p>
             ) : (
-                <pre className="chords-display">{chords}</pre>
+                <pre className="chords-display" style={{ textAlign: isHebrew ? "right" : "left" }}>
+                    {chords}
+                </pre>
             )}
             {chords && (
                 <button className="fixed-button auto-scroll-button" onClick={toggleAutoScroll}>
