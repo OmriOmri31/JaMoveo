@@ -62,7 +62,7 @@ app.post('/extract', async (req, res) => {
 // Initialize Socket.io
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000", // React frontend
+        origin: process.env.REACT_APP_SERVICE_ONE_URL, // React frontend
         methods: ["GET", "POST"]
     }
 });

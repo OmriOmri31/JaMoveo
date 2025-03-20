@@ -15,7 +15,7 @@ const Main = () => {
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/session/${code}`);
+                const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/session/${code}`);
                 if (!response.ok) {
                     if (localStorage.getItem("isAdmin") === "false")
                         navigate("/Home");
@@ -61,7 +61,7 @@ const Main = () => {
     const handleSearchSubmit = async (e) => {
         e.preventDefault();
         setLoading(true); // Show loader while waiting for results
-        const response = await fetch("http://localhost:3001/results", {
+        const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/results`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ songName: query }),

@@ -34,7 +34,7 @@ const SignUp = () => {
     const handleRegister = async () => {
         try {
 
-            const registerResponse = await fetch('http://localhost:3001/register', {
+            const registerResponse = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -50,7 +50,7 @@ const SignUp = () => {
             const registerData = await registerResponse.json();
             if (registerResponse.ok) {
                 // Automatically log in after successful registration
-                const loginResponse = await fetch("http://localhost:3001/login", {
+                const loginResponse = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ nickname, password }),

@@ -34,7 +34,8 @@ const SignUpAdmin = () => {
     // Send form data to backend and auto log in on success
     const handleRegister = async () => {
         try {
-            const response = await fetch('http://localhost:3001/register', {
+            console.log(`${process.env.REACT_APP_SERVICE_TWO_URL}/register`);
+            const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -49,7 +50,7 @@ const SignUpAdmin = () => {
             const data = await response.json();
             if (response.ok) {
                 // Automatically log in after successful registration
-                const loginResponse = await fetch("http://localhost:3001/login", {
+                const loginResponse = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ nickname, password }),

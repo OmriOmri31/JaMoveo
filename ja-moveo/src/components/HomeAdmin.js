@@ -6,7 +6,7 @@ const HomeAdmin = () => {
 
     const createJamSession = async () => {
         try {
-            const res = await fetch("http://localhost:3001/create-session", {
+            const res = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/create-session`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
             });
