@@ -1,17 +1,24 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
 
 async function getSongResults(songName) {
     // Decide on browser options based on the language
     let browserOptions = {};
     if (/[\u0590-\u05FF]/.test(songName)) {
         // Hebrew: regular headless mode is fine
-        browserOptions = { headless: true };
+        browserOptions = {
+            headless: true,
+            args: ['--disable-blink-features=AutomationControlled','--no-sandbox', '--disable-setuid-sandbox']
+        };
+
     } else {
         // English: run headless but mimic headful behavior
         browserOptions = {
             headless: true,
-            args: ['--disable-blink-features=AutomationControlled']
+            args: [
+                '--disable-blink-features=AutomationControlled',
+                '--no-sandbox',
+                '--disable-setuid-sandbox'
+            ]
         };
     }
 
@@ -61,7 +68,8 @@ async function getSongResults(songName) {
 
                 // Extract the artist using regex matching "tab/artistName/"
                 let artist = "";
-                const artistMatch = href.match(/tab\/([^\/]+)/);
+                const artistMatch = href.match(/tab\/([^\/]+)/);// eslint-disable-line
+
                 if (artistMatch) {
                     artist = artistMatch[1]
                         .split('-')
@@ -70,8 +78,10 @@ async function getSongResults(songName) {
                 }
 
                 // Extract the song name from the href by capturing the text between the artist part and "-chords"
-                let songName = "";
-                const songMatch = href.match(/\/tab\/[^\/]+\/(.*?)-chords/);
+                let songName = "";// eslint-disable-line
+
+                const songMatch = href.match(/\/tab\/[^\/]+\/(.*?)-chords/);// eslint-disable-line
+
                 if (songMatch) {
                     songName = songMatch[1]
                         .split('-')
@@ -87,7 +97,6 @@ async function getSongResults(songName) {
 
     await browser.close();
     // Save results locally as a JSON file
-    fs.writeFileSync("results.json", JSON.stringify(jsonResults, null, 2));
     return jsonResults;
 }
 
