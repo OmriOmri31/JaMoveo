@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUpAdmin = () => {
-    // State variables
     const [nickname, setNickname] = useState('');
     const [password, setPassword] = useState('');
     const [selectedBuiltInImage, setSelectedBuiltInImage] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null);
     const [instrument, setInstrument] = useState('');
     // Here isAdmin is preset to true for admins
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [isAdmin] = useState(true);
     const navigate = useNavigate();
 
     // Built-in images array

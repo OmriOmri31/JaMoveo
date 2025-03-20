@@ -5,14 +5,14 @@ import socket from "../socket";
 const TableScreen = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    // Safely extract results. If undefined/not an array => use empty array.
+    // Safely extract results. If undefined/not an array => use empty array and shoW No results
     const { results } = location.state || {};
     const finalResults = Array.isArray(results) ? results : [];
     const sessionCode = localStorage.getItem("sessionCode");
 
     useEffect(() => {
         if (sessionCode) {
-            // Rejoin the lobby if necessary
+            // Rejoin the lobby
             socket.emit("joinLobby", {
                 room: `Main/${sessionCode}`,
                 user: localStorage.getItem("nickname"),

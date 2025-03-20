@@ -1,3 +1,4 @@
+// This module uses Puppeteer to extract chords (and optionally lyrics) from a song's webpage, handling both English and Hebrew formats.
 const puppeteer = require('puppeteer');
 
 function isHebrew(url) {
@@ -70,6 +71,5 @@ async function extractLyrics(songWithChords) {
 
     return filteredLines.join('\n');
 }
-
 
 module.exports = { extractChords, extractLyrics };

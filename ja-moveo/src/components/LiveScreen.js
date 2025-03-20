@@ -49,13 +49,13 @@ const LiveScreen = () => {
         if (href) {
             fetchChords();
         }
-        // If admin, signal all users to redirect to live view
+        // If admin, signal all users to redirect to live screen
         if (localStorage.getItem("isAdmin") === "true" && href) {
             socket.emit("redirectLive", { room: `Main/${code}`, href });
         }
     }, [href, code]);
 
-    // Quit the session: return everyone to Main
+    // Quit the session: return everyone to Main without leaving the socket
     const handleQuit = () => {
         socket.emit("redirectMain", { room: `Main/${code}`, code });
     };

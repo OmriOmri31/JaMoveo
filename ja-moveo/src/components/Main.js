@@ -35,7 +35,7 @@ const Main = () => {
 
         checkSession();
 
-        // Join the session room; pass isAdmin flag from localStorage
+        // Join the session room; pass isAdmin flag (of type string) from localStorage
         socket.emit("joinLobby", {
             room: `Main/${code}`,
             user: localStorage.getItem("nickname"),
