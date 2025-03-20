@@ -24,7 +24,7 @@ const LiveScreen = () => {
         };
     }, [autoScroll]);
 
-    // Fetch chords and signal live redirection if admin
+    // Fetch chords and, if admin, signal live
     useEffect(() => {
         const fetchChords = async () => {
             try {
@@ -49,13 +49,13 @@ const LiveScreen = () => {
         if (href) {
             fetchChords();
         }
-        // If admin, signal all users to redirect to live screen
+        // If admin, redirect everyone to live
         if (localStorage.getItem("isAdmin") === "true" && href) {
             socket.emit("redirectLive", { room: `Main/${code}`, href });
         }
     }, [href, code]);
 
-    // Quit the session: return everyone to Main without leaving the socket
+    // Quit → main
     const handleQuit = () => {
         socket.emit("redirectMain", { room: `Main/${code}`, code });
     };
@@ -75,56 +75,72 @@ const LiveScreen = () => {
         setAutoScroll((prev) => !prev);
     };
 
-    // Determine if text is Hebrew
+    // Detect Hebrew
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
 
     return (
         <div className="page-container live-container">
             <h2 className="page-title">Live Chords</h2>
+
             {error ? (
                 <p className="error-text">{error}</p>
             ) : chords ? (
-                <pre
-                    className="chords-display"
-                    style={{ textAlign: isHebrew ? "right" : "left" }}
-                >
-          {chords}
-        </pre>
+                <>
+          <pre
+              className="chords-display"
+              style={{ textAlign: isHebrew ? "right" : "left" }}
+          >
+            {chords}
+          </pre>
+
+                    {/* Heart Toggle */}
+                    <div
+                        className={`love-heart ${autoScroll ? "checked" : ""}`}
+                        onClick={toggleAutoScroll}
+                        style={{
+                            position: "fixed",
+                            top: "50%",
+                            // If Hebrew, go 100px from left; else from right
+                            [isHebrew ? "left" : "right"]: "200px",
+                            // make it bigger + center better:
+                            transform: "translateY(-50%) rotate(-45deg) translate(-50%, -38px) scale(5)",
+                            zIndex: 999,
+                            cursor: "pointer",
+                        }}
+                    >
+                        <div className="bottom" />
+                        <div className="round" />
+                    </div>
+
+                    {/* Small label under the heart */}
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: "calc(50% + 90px)", // slightly below bigger heart
+                            [isHebrew ? "left" : "right"]: "150px",
+                            transform: "translateY(-50%)",
+                            fontSize: "0.85rem",
+                            textTransform: "uppercase",
+                            zIndex: 999,
+                        }}
+                    >
+                        {autoScroll ? "Stop Scroll" : "Auto Scroll"}
+                    </div>
+                </>
             ) : (
-                // Show loader when waiting for chords
+                // Loader while fetching
                 <div className="loader-wrapper">
                     <div className="loader">
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
-                        <div className="loader-square"></div>
+                        <div className="loader-square" />
+                        <div className="loader-square" />
+                        <div className="loader-square" />
+                        <div className="loader-square" />
+                        <div className="loader-square" />
+                        <div className="loader-square" />
+                        <div className="loader-square" />
+                        <div className="loader-square" />
                     </div>
                 </div>
-            )}
-
-            {/* Auto-Scroll Button (only when chords loaded) */}
-            {chords && (
-                <button
-                    className="main__action scroll-button"
-                    onClick={toggleAutoScroll}
-                    style={{
-                        position: "fixed",
-                        top: "50%",
-                        // Float on the right for English, on the left for Hebrew
-                        [isHebrew ? "left" : "right"]: "20px",
-                        transform: "translateY(-50%)",
-                        opacity: 0.7,
-                    }}
-                >
-          <span className="main__scroll-text">
-            {autoScroll ? "Stop Scrolling" : "Auto Scroll"}
-          </span>
-                    <div className="main__scroll-box">↓</div>
-                </button>
             )}
 
             {/* Quit Button for Admin */}

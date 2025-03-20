@@ -209,6 +209,7 @@ button:hover {
   flex-direction: column;
   gap: 1rem;
 }
+
 /* Welcome Screen Styles */
 .welcome-container {
   max-width: 600px;
@@ -257,6 +258,7 @@ button:hover {
 .primary-button:hover {
   background-color: #404D67;
 }
+
 /* Common Page Container */
 .page-container {
   max-width: 800px;
@@ -388,6 +390,7 @@ button:hover {
   background-color: #404D67;
 }
 
+/* ------------------ Loader (Squares) -------------------- */
 /* From Uiverse.io by ZacharyCrespin */
 @keyframes square-animation {
   0% {
@@ -513,6 +516,7 @@ button:hover {
 .loader-square:nth-of-type(7) {
   animation-delay: -10s;
 }
+
 .loader-wrapper {
   display: flex;
   justify-content: center;
@@ -525,8 +529,7 @@ button:hover {
   width: 96px;
   height: 96px;
   transform: rotate(45deg);
-  /* Centering via margin auto (optional if already wrapped in .loader-wrapper) */
-  margin: 0 auto;
+  margin: 0 auto; /* Center if needed */
 }
 
 .loader-square {
@@ -544,38 +547,7 @@ button:hover {
   animation: square-animation 10s ease-in-out infinite both;
 }
 
-@keyframes square-animation {
-  0% { left: 0; top: 0; }
-  10.5% { left: 0; top: 0; }
-  12.5% { left: 32px; top: 0; }
-  23% { left: 32px; top: 0; }
-  25% { left: 64px; top: 0; }
-  35.5% { left: 64px; top: 0; }
-  37.5% { left: 64px; top: 32px; }
-  48% { left: 64px; top: 32px; }
-  50% { left: 32px; top: 32px; }
-  60.5% { left: 32px; top: 32px; }
-  62.5% { left: 32px; top: 64px; }
-  73% { left: 32px; top: 64px; }
-  75% { left: 0; top: 64px; }
-  85.5% { left: 0; top: 64px; }
-  87.5% { left: 0; top: 32px; }
-  98% { left: 0; top: 32px; }
-  100% { left: 0; top: 0; }
-}
-
-/* Loader square animation delays */
-.loader-square:nth-of-type(1) { animation-delay: 0s; }
-.loader-square:nth-of-type(2) { animation-delay: -1.4285714286s; }
-.loader-square:nth-of-type(3) { animation-delay: -2.8571428571s; }
-.loader-square:nth-of-type(4) { animation-delay: -4.2857142857s; }
-.loader-square:nth-of-type(5) { animation-delay: -5.7142857143s; }
-.loader-square:nth-of-type(6) { animation-delay: -7.1428571429s; }
-.loader-square:nth-of-type(7) { animation-delay: -8.5714285714s; }
-.loader-square:nth-of-type(8) { animation-delay: -10s; }
-
-
-/* Animate scroll icon */
+/* ------------- Animated Arrow for Old Scroll Button ------------- */
 @keyframes scroll-down {
   0%, 100% {
     transform: translateY(0rem);
@@ -591,42 +563,111 @@ button:hover {
   }
 }
 
-/* Container for the entire scroll button */
-.main__action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #983732;
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  border-radius: 0;
+/* ------------- Heart Toggle (No Checkbox) ------------- */
+
+/* The "unfilled" heart container */
+.love-heart {
+  position: relative;
+  box-sizing: border-box;
+  /* The transform is overridden inline in LiveScreen.js,
+     but we keep rotate(-45deg) scale(...) here as well
+     for fallback or if you use it outside that style. */
+  transform: rotate(-45deg) translate(-50%, -33px) scale(4);
+  display: block;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  border: 1px solid hsl(231deg 28% 86%);
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+  width: 10px;
+  height: 8px;
+  border-bottom: 0;
 }
 
-/* Change background color on hover */
-.main__action:hover {
-  background-color: #404D67;
+/* Right half of the heart shape */
+.love-heart::after {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border: 1px solid hsl(231deg 28% 86%);
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+  border-bottom: 0;
+  right: -9px;
+  transform: rotate(90deg);
+  top: 7px;
+  width: 10px;
+  height: 8px;
 }
 
-/* Scroll Text */
-.main__scroll-text {
-  /* Match your brand text styling */
-  color: #fff;
+/* Bottom portion of the heart */
+.love-heart .bottom {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border-left: 1px solid hsl(231deg 28% 86%);
+  border-bottom: 1px solid hsl(231deg 28% 86%);
+  width: 11px;
+  height: 11px;
+  left: -1px;
+  top: 5px;
+  border-radius: 0 0 0 5px;
 }
 
-/* Scroll Box (holds the arrow icon or ASCII arrow) */
-.main__scroll-box {
-  /* You can size or style this arrow container as you prefer */
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
+/* The small round toggle "ball" – top-left by default */
+.round {
+  position: absolute;
+  z-index: 1;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.24);
+  border-radius: 100%;
+  left: 0;
+  bottom: -1px;
+  animation: uncheck-ball 0.5s forwards; /* If heart starts "unchecked" */
 }
 
-/* Hovering the button triggers the arrow animation */
-.main__action:hover .main__scroll-box {
-  animation: scroll-down 3s infinite;
+/* On toggle "checked", fill the heart & run check animation on .round */
+.love-heart.checked {
+  border-color: hsl(347deg 81% 61%);
+  box-shadow: inset 6px -5px 0px 2px hsl(347deg 99% 72%);
+}
+
+.love-heart.checked::after,
+.love-heart.checked .bottom {
+  border-color: hsl(347deg 81% 61%);
+  box-shadow: inset 6px -5px 0px 2px hsl(347deg 99% 72%);
+}
+
+/* The toggle ball going from top-left -> down -> bottom-right */
+.love-heart.checked .round {
+  animation: check-ball 0.5s forwards;
+}
+
+/* Animate to bottom-right (down first, then across) */
+@keyframes check-ball {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, 10px); /* move down */
+  }
+  100% {
+    transform: translate(8px, 7px); /* go to bottom-right */
+  }
+}
+
+/* Animate from bottom-right -> down -> top-left */
+@keyframes uncheck-ball {
+  0% {
+    transform: translate(8px, 7px);
+  }
+  50% {
+    transform: translate(0, 10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
