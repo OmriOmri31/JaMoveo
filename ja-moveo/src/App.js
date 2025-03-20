@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import socket from './socket';
 
@@ -43,13 +43,6 @@ function SocketListener() {
 }
 
 function App() {
-    const [setLoggedIn] = useState(false);
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setLoggedIn(true);
-        }
-    }, []);
 
     return (
         <Router>
