@@ -20,6 +20,9 @@ app.use(express.json());
 
 const Session = require('./models/Session');
 
+// Log the allowed frontend URL from the environment variable
+console.log("Allowed frontend origin:", process.env.REACT_APP_SERVICE_ONE_URL);
+
 // Endpoint to check if a session exists
 app.get('/session/:code', async (req, res) => {
     try {
@@ -43,6 +46,7 @@ app.post('/create-session', async (req, res) => {
     }
 });
 
+// Endpoint to extract chords or lyrics
 app.post('/extract', async (req, res) => {
     try {
         const { url, instrument } = req.body;
@@ -59,17 +63,32 @@ app.post('/extract', async (req, res) => {
     }
 });
 
-// Initialize Socket.io
+// Set up allowed origins for Socket.io CORS
+const allowedOrigins = [
+    process.env.REACT_APP_SERVICE_ONE_URL, // e.g., "https://jamoveomri.netlify.app"
+    "http://localhost:3000"              // Local development
+];
+
+// Initialize Socket.io with updated CORS configuration
 const io = new Server(server, {
     cors: {
-        origin: process.env.REACT_APP_SERVICE_ONE_URL, // React frontend
-        methods: ["GET", "POST"]
+        origin: (origin, callback) => {
+            // Allow requests with no origin (like mobile apps or curl requests)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            } else {
+                return callback(new Error("Origin not allowed by CORS"));
+            }
+        },
+        methods: ["GET", "POST"],
     }
 });
 
 const lobbyUsers = {};
 const adminForRoom = {};
 
+// Socket.io connection handling
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
@@ -96,7 +115,6 @@ io.on('connection', (socket) => {
         // Send the redirect instruction to all sockets in "Main/<code>" except the sender
         io.in(room).emit('redirectMain', { code });
     });
-
 
     // When admin explicitly closes the session
     socket.on('closeSession', async ({ room }) => {
@@ -189,6 +207,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Results Route (POST /results)
 app.post('/results', async (req, res) => {
     try {
         const { songName } = req.body;
@@ -199,8 +218,7 @@ app.post('/results', async (req, res) => {
     }
 });
 
-
-//Starting server
+// Start the server
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
     console.log(`🚀 Server is running on port ${PORT}`);
