@@ -92,6 +92,12 @@ io.on('connection', (socket) => {
         socket.to(room).emit("redirectLive", { href });
     });
 
+    socket.on('redirectMain', ({ room, code }) => {
+        // Send the redirect instruction to all sockets in "Main/<code>" except the sender
+        io.in(room).emit('redirectMain', { code });
+    });
+
+
     // When admin explicitly closes the session
     socket.on('closeSession', async ({ room }) => {
         if (adminForRoom[room] === socket.id) {

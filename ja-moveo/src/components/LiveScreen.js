@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import socket from "../socket";
+import { useNavigate } from "react-router-dom";
 
 const LiveScreen = () => {
     const { code } = useParams();
@@ -9,6 +10,7 @@ const LiveScreen = () => {
     const [chords, setChords] = useState("");
     const [error, setError] = useState(null);
     const [autoScroll, setAutoScroll] = useState(false);
+    const navigate = useNavigate();
 
     // Auto-scroll effect when enabled
     useEffect(() => {
@@ -59,8 +61,18 @@ const LiveScreen = () => {
     };
 
     const handleQuit = () => {
-        socket.emit("closeSession", { room: `Main/${code}` });
+        socket.emit("redirectMain", { room: `Main/${code}`, code });
     };
+
+    useEffect(() => {
+        // Listen for the server's "redirectMain" broadcast
+        socket.on("redirectMain", ({ code }) => {
+            navigate(`/main/${code}`);
+        });
+        return () => {
+            socket.off("redirectMain");
+        };
+    }, [navigate]);
 
     // Determine text alignment based on whether chords contain Hebrew characters
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
