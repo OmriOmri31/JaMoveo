@@ -1,4 +1,3 @@
-// src/components/HomeAdmin.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 

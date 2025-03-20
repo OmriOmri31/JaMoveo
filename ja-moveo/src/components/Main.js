@@ -88,9 +88,11 @@ const Main = () => {
                 <div className="admin-section">
                     <h3 className="section-title">Search any song...</h3>
                     {loading ? (
-                            // Show loader for admin when waiting for search results
+                        // Show loader for admin when waiting for search results
                         <div className="loader-wrapper">
-                            <h3 className="section-title">Searching for your song's chords...</h3>
+                            <h3 className="section-title">
+                                Searching for your song's chords...
+                            </h3>
                             <div className="loader">
                                 <div className="loader-square"></div>
                                 <div className="loader-square"></div>

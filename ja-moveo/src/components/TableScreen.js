@@ -1,4 +1,3 @@
-// src/components/TableScreen.js
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import socket from "../socket";
@@ -6,7 +5,9 @@ import socket from "../socket";
 const TableScreen = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { results } = location.state || { results: [] };
+    // Safely extract results. If undefined/not an array => use empty array.
+    const { results } = location.state || {};
+    const finalResults = Array.isArray(results) ? results : [];
     const sessionCode = localStorage.getItem("sessionCode");
 
     useEffect(() => {
@@ -26,37 +27,45 @@ const TableScreen = () => {
     return (
         <div className="page-container">
             <h2 className="page-title">Song Results</h2>
-            {results.length === 0 ? (
+            {finalResults.length === 0 ? (
                 <div className="no-results">
-                    <p className="no-results-text">No results found</p>
+                    <p className="no-results-text">No Results</p>
                     <button
                         className="primary-button"
                         onClick={() => navigate(`/main/${sessionCode}`)}
                     >
-                        Search another song
+                        Go Back
                     </button>
                 </div>
             ) : (
-                <table className="results-table">
-                    <thead>
-                    <tr>
-                        <th>Artist</th>
-                        <th>Song</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {results.map((item, index) => (
-                        <tr
-                            key={index}
-                            className="table-row"
-                            onClick={() => handleRowClick(item.href)}
-                        >
-                            <td>{item.artist}</td>
-                            <td>{item.songName}</td>
+                <>
+                    <table className="results-table">
+                        <thead>
+                        <tr>
+                            <th>Artist</th>
+                            <th>Song</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {finalResults.map((item, index) => (
+                            <tr
+                                key={index}
+                                className="table-row"
+                                onClick={() => handleRowClick(item.href)}
+                            >
+                                <td>{item.artist}</td>
+                                <td>{item.songName}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                    <button
+                        className="primary-button"
+                        onClick={() => navigate(`/main/${sessionCode}`)}
+                    >
+                        Go Back
+                    </button>
+                </>
             )}
         </div>
     );
