@@ -63,25 +63,12 @@ app.post('/extract', async (req, res) => {
     }
 });
 
-// Set up allowed origins for Socket.io CORS
-const allowedOrigins = [
-    process.env.REACT_APP_SERVICE_ONE_URL, // e.g., "https://jamoveomri.netlify.app"
-    "http://localhost:3000"              // Local development
-];
 
 // Initialize Socket.io with updated CORS configuration
 const io = new Server(server, {
     cors: {
-        origin: (origin, callback) => {
-            // Allow requests with no origin (like mobile apps or curl requests)
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            } else {
-                return callback(new Error("Origin not allowed by CORS"));
-            }
-        },
-        methods: ["GET", "POST"],
+        origin: "*",
+        methods: ["GET", "POST"]
     }
 });
 
