@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
-import { useNavigate } from "react-router-dom";
 
 const LiveScreen = () => {
     const { code } = useParams();
@@ -56,25 +55,27 @@ const LiveScreen = () => {
         }
     }, [href, code]);
 
-    const toggleAutoScroll = () => {
-        setAutoScroll((prev) => !prev);
-    };
-
+    // Quit the session: return everyone to Main
     const handleQuit = () => {
         socket.emit("redirectMain", { room: `Main/${code}`, code });
     };
 
+    // Listen for server's "redirectMain" event
     useEffect(() => {
-        // Listen for the server's "redirectMain" broadcast
-        socket.on("redirectMain", ({ code }) => {
-            navigate(`/main/${code}`);
+        socket.on("redirectMain", ({ code: mainCode }) => {
+            navigate(`/main/${mainCode}`);
         });
         return () => {
             socket.off("redirectMain");
         };
     }, [navigate]);
 
-    // Determine text alignment based on whether chords contain Hebrew characters
+    // Toggle auto-scroll
+    const toggleAutoScroll = () => {
+        setAutoScroll((prev) => !prev);
+    };
+
+    // Determine if text is Hebrew
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
 
     return (
@@ -104,16 +105,39 @@ const LiveScreen = () => {
                     </div>
                 </div>
             )}
+
+            {/* Auto-Scroll Button (only when chords loaded) */}
             {chords && (
                 <button
-                    className="fixed-button auto-scroll-button"
+                    className="main__action scroll-button"
                     onClick={toggleAutoScroll}
+                    style={{
+                        position: "fixed",
+                        top: "50%",
+                        // Float on the right for English, on the left for Hebrew
+                        [isHebrew ? "left" : "right"]: "20px",
+                        transform: "translateY(-50%)",
+                        opacity: 0.7,
+                    }}
                 >
-                    {autoScroll ? "Stop Auto Scroll" : "Start Auto Scroll"}
+          <span className="main__scroll-text">
+            {autoScroll ? "Stop Scrolling" : "Auto Scroll"}
+          </span>
+                    <div className="main__scroll-box">↓</div>
                 </button>
             )}
+
+            {/* Quit Button for Admin */}
             {localStorage.getItem("isAdmin") === "true" && (
-                <button className="fixed-button quit-button" onClick={handleQuit}>
+                <button
+                    className="fixed-button quit-button"
+                    onClick={handleQuit}
+                    style={{
+                        position: "fixed",
+                        bottom: "20px",
+                        left: "20px",
+                    }}
+                >
                     QUIT
                 </button>
             )}

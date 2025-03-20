@@ -577,3 +577,58 @@ button:hover {
 .loader-square:nth-of-type(8) { animation-delay: -10s; }
 
 
+/* Animate scroll icon */
+@keyframes scroll-down {
+  0%, 100% {
+    transform: translateY(0rem);
+    opacity: 1;
+  }
+  35% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  70% {
+    transform: translateY(-1rem);
+    opacity: 0;
+  }
+}
+
+/* Container for the entire scroll button */
+.main__action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #983732;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Change background color on hover */
+.main__action:hover {
+  background-color: #404D67;
+}
+
+/* Scroll Text */
+.main__scroll-text {
+  /* Match your brand text styling */
+  color: #fff;
+}
+
+/* Scroll Box (holds the arrow icon or ASCII arrow) */
+.main__scroll-box {
+  /* You can size or style this arrow container as you prefer */
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+/* Hovering the button triggers the arrow animation */
+.main__action:hover .main__scroll-box {
+  animation: scroll-down 3s infinite;
+}
