@@ -28,7 +28,6 @@ async function getSongResults(songName) {
 
     let jsonResults;
     if (/[\u0590-\u05FF]/.test(songName)) {
-        // Hebrew results from tab4u.com remains unchanged.
         await page.goto(`https://www.tab4u.com/resultsSimple?tab=songs&q=${encodeURIComponent(songName)}`);
         await page.waitForSelector('::-p-xpath(//*[@id="resultsPage"]/div[2]/table)');
         jsonResults = await page.evaluate(() => {
@@ -39,7 +38,7 @@ async function getSongResults(songName) {
                 const imageStyle = a.querySelector("span.ruArtPhoto")?.getAttribute("style");
                 const imageMatch = imageStyle && imageStyle.match(/url\((.*?)\)/);
                 const image = imageMatch ? imageMatch[1].replace(/['"]/g, "") : null;
-                const songName = row.querySelector("div.sNameI19")?.innerText.trim();
+                const songName = row.querySelector("div.sNameI19")?.innerText.slice(0,-1).trimEnd(); // removes unnecessary '/' and white spaces in the end of the name
                 const artist = row.querySelector("div.aNameI19")?.innerText.trim();
                 const href = "https://tab4u.com/" + a.getAttribute("href");
                 return { image, songName, artist, href };
