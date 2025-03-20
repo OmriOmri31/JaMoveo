@@ -17,13 +17,17 @@ const Main = () => {
             try {
                 const response = await fetch(`http://localhost:3001/session/${code}`);
                 if (!response.ok) {
-                    navigate("/Home");
-                    alert("Session doesn't exist");
-                    return;
+                    if (localStorage.getItem("isAdmin") === "false")
+                        navigate("/Home");
+                    else
+                        navigate("/HomeAdmin");
                 }
             } catch (error) {
                 console.error(error);
-                navigate("/Home");
+                if (localStorage.getItem("isAdmin") === "false")
+                    navigate("/Home");
+                else
+                    navigate("/HomeAdmin");
                 alert("Server error");
                 return;
             }

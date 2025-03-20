@@ -100,7 +100,7 @@ const SignUpAdmin = () => {
         <div className="sign-up-container">
             <h2 className="sign-up-title">Sign Up</h2>
             <form className="sign-up-form" onSubmit={handleSubmit}>
-                <button type="button" onClick={() => window.location.href = "/"}>
+                <button type="button" onClick={() => window.location.href = "/SignUp"}>
                     Sign Up as a Simple User
                 </button>
 
