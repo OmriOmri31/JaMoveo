@@ -1,4 +1,4 @@
-```markdown
+
 # JaMoveo
 
 JaMoveo is a web application built for the Moveo band to enhance rehearsal sessions. It enables each band member to log in from their phone, register with their instrument of choice, and join live jam sessions. An admin user can create sessions, search for songs in both English and Hebrew, and control the live display of chords and lyrics during a session.
