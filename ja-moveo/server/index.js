@@ -88,9 +88,9 @@ io.on('connection', (socket) => {
     });
 
     // Admin shares extracted chords to all
-    socket.on("chordsData", ({ room, chords }) => {
+    socket.on("chordsData", ({ room, chords, lyrics }) => {
         if (adminForRoom[room] === socket.id) {
-            socket.to(room).emit("chordsData", { chords });
+            socket.to(room).emit("chordsData", { chords, lyrics });
         }
     });
 
