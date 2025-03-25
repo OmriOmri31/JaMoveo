@@ -11,6 +11,9 @@ const LiveScreen = () => {
     const [autoScroll, setAutoScroll] = useState(false);
     const navigate = useNavigate();
 
+    // Check if local user is Vocals
+    const isVocals = localStorage.getItem("instrument") === "Vocals";
+
     useEffect(() => {
         let scrollInterval;
         if (autoScroll) {
@@ -23,7 +26,18 @@ const LiveScreen = () => {
         };
     }, [autoScroll]);
 
+    // Listen for chords broadcast from admin
     useEffect(() => {
+        socket.on("chordsData", ({ chords: c, lyrics: l }) => {
+            setChords(isVocals ? l : c);
+        });
+        return () => {
+            socket.off("chordsData");
+        };
+    }, [isVocals]);
+
+    useEffect(() => {
+        // Only admin calls /extract
         const fetchChords = async () => {
             try {
                 const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/extract`, {
@@ -31,26 +45,32 @@ const LiveScreen = () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         url: href,
-                        instrument: localStorage.getItem("instrument"),
+                        isAdmin: localStorage.getItem("isAdmin") === "true",
                     }),
                 });
                 if (!response.ok) {
                     throw new Error("Extraction failed");
                 }
                 const data = await response.json();
-                setChords(data.chords);
+                // Admin sets own display
+                setChords(isVocals ? data.lyrics : data.chords);
+                // Then admin emits both
+                socket.emit("chordsData", {
+                    room: `Main/${code}`,
+                    chords: data.chords,
+                    lyrics: data.lyrics
+                });
             } catch (err) {
                 console.error(err);
                 setError("Failed to extract chords");
             }
         };
-        if (href) {
+
+        if (href && localStorage.getItem("isAdmin") === "true") {
             fetchChords();
-        }
-        if (localStorage.getItem("isAdmin") === "true" && href) {
             socket.emit("redirectLive", { room: `Main/${code}`, href });
         }
-    }, [href, code]);
+    }, [href, code, isVocals]);
 
     const handleQuit = () => {
         socket.emit("redirectMain", { room: `Main/${code}`, code });
@@ -66,9 +86,10 @@ const LiveScreen = () => {
     }, [navigate]);
 
     const toggleAutoScroll = () => {
-        setAutoScroll((prev) => !prev);
+        setAutoScroll(prev => !prev);
     };
 
+    // If chords contain Hebrew, right-align them
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
 
     return (
