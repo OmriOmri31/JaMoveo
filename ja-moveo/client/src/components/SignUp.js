@@ -185,11 +185,13 @@ const SignUp = () => {
                 <button type="submit">Sign Up</button>
             </form>
             <button
-                className="primary-button mt-4 flex items-center gap-2"
-                onClick={() => navigate("/")}>
+                className="primary-button back-button"
+                onClick={() => navigate("/")}
+            >
                 <ArrowLeft className="w-5 h-5"/>
                 Back
             </button>
+
         </div>
     );
 };

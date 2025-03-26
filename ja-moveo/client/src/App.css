@@ -671,3 +671,8 @@ button:hover {
     transform: translate(0, 0);
   }
 }
+.back-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
