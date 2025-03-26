@@ -2,25 +2,10 @@ const puppeteer = require("puppeteer");
 
 async function getSongResults(songName) {
     // Decide on browser options based on the language
-    let browserOptions = {};
-    if (/[\u0590-\u05FF]/.test(songName)) {
-        // Hebrew: regular headless mode is fine
-        browserOptions = {
-            headless: true,
-            args: ['--disable-blink-features=AutomationControlled','--no-sandbox', '--disable-setuid-sandbox']
-        };
-
-    } else {
-        // English: run headless but mimic headful behavior
-        browserOptions = {
-            headless: true,
-            args: [
-                '--disable-blink-features=AutomationControlled',
-                '--no-sandbox',
-                '--disable-setuid-sandbox'
-            ]
-        };
-    }
+    const browserOptions = {
+        headless: true,
+        args: ['--disable-blink-features=AutomationControlled','--no-sandbox', '--disable-setuid-sandbox']
+    };
 
     const browser = await puppeteer.launch(browserOptions);
     const page = await browser.newPage();

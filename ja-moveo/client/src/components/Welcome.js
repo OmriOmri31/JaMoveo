@@ -1,18 +1,19 @@
 // src/components/Welcome.js
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
     const navigate = useNavigate();
-
-    // If logged in, redirect accordingly
-    if (localStorage.getItem("loggedIn") === "true") {
-        if (localStorage.getItem("isAdmin") === "true") {
-            navigate("/HomeAdmin");
-        } else {
-            navigate("/Home");
+    useEffect(() => {
+        // If logged in, redirect accordingly
+        if (localStorage.getItem("loggedIn") === "true") {
+            if (localStorage.getItem("isAdmin") === "true") {
+                navigate("/HomeAdmin");
+            } else {
+                navigate("/Home");
+            }
         }
-    }
+    },)
 
     return (
         <div className="welcome-container">
