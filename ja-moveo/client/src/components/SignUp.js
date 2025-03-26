@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {ArrowLeft} from "lucide-react";
 
 const SignUp = () => {
     const [nickname, setNickname] = useState('');
@@ -104,6 +105,13 @@ const SignUp = () => {
 
     return (
         <div className="sign-up-container">
+            <button
+                className="primary-button absolute top-4 left-4 flex items-center gap-2"
+                onClick={() => navigate("/")}
+            >
+                <ArrowLeft className="w-5 h-5" />
+                Back
+            </button>
             <h2 className="sign-up-title">Sign Up</h2>
             <form className="sign-up-form" onSubmit={handleSubmit}>
                 {/* Button to go to Admin Signup */}
