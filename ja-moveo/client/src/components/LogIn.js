@@ -49,9 +49,8 @@ const LogIn = () => {
                 <button type="submit">Log In</button>
             </form>
             <button
-                className="primary-button mt-6 flex items-center gap-2"
-                onClick={() => navigate("/")}
-            >
+                className="primary-button mt-4 flex items-center gap-2"
+                onClick={() => navigate("/")}>
                 <ArrowLeft className="w-5 h-5"/>
                 Back
             </button>
