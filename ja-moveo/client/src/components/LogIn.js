@@ -29,17 +29,8 @@ const LogIn = () => {
     };
 
     return (
-        <div className="page-container">
-            {/* Back button styled as primary-button */}
-            <button
-                className="primary-button absolute top-4 left-4 flex items-center gap-2"
-                onClick={() => navigate("/")}
-            >
-                <ArrowLeft className="w-5 h-5" />
-                Back
-            </button>
+        <div className="page-container"><h2 className="page-title">Log In</h2>
 
-            <h2 className="page-title">Log In</h2>
             <form className="page-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -57,6 +48,13 @@ const LogIn = () => {
                 />
                 <button type="submit">Log In</button>
             </form>
+            <button
+                className="primary-button mt-6 flex items-center gap-2"
+                onClick={() => navigate("/")}
+            >
+                <ArrowLeft className="w-5 h-5"/>
+                Back
+            </button>
         </div>
     );
 };

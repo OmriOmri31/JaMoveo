@@ -105,13 +105,6 @@ const SignUp = () => {
 
     return (
         <div className="sign-up-container">
-            <button
-                className="primary-button absolute top-4 left-4 flex items-center gap-2"
-                onClick={() => navigate("/")}
-            >
-                <ArrowLeft className="w-5 h-5" />
-                Back
-            </button>
             <h2 className="sign-up-title">Sign Up</h2>
             <form className="sign-up-form" onSubmit={handleSubmit}>
                 {/* Button to go to Admin Signup */}
@@ -153,7 +146,7 @@ const SignUp = () => {
                                 onClick={() => handleBuiltInImageSelect(img)}
                                 className={`built-in-image-box ${selectedBuiltInImage === img ? 'selected' : ''}`}
                             >
-                                <img src={img} alt={`Built-in ${index + 1}`} />
+                                <img src={img} alt={`Built-in ${index + 1}`}/>
                             </div>
                         ))}
                     </div>
@@ -162,10 +155,10 @@ const SignUp = () => {
                     <div className="upload-container">
                         <label>
                             Or Upload an Image:
-                            <input type="file" accept="image/*" onChange={handleImageUpload} />
+                            <input type="file" accept="image/*" onChange={handleImageUpload}/>
                         </label>
                         {uploadedImage && (
-                            <img src={uploadedImage} alt="Uploaded" />
+                            <img src={uploadedImage} alt="Uploaded"/>
                         )}
                     </div>
                 </div>
@@ -191,6 +184,13 @@ const SignUp = () => {
                 {/* Submit button */}
                 <button type="submit">Sign Up</button>
             </form>
+            <button
+                className="primary-button mt-6 flex items-center gap-2"
+                onClick={() => navigate("/")}
+            >
+                <ArrowLeft className="w-5 h-5"/>
+                Back
+            </button>
         </div>
     );
 };
