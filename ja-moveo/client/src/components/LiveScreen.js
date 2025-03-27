@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
-// 1) Import your quotes
 import { quotes } from "./Quotes";
 
 const LiveScreen = () => {
@@ -12,11 +11,8 @@ const LiveScreen = () => {
     const [error, setError] = useState(null);
     const [autoScroll, setAutoScroll] = useState(false);
     const navigate = useNavigate();
-
-    // 2) State to hold a random quote
     const [randomQuote, setRandomQuote] = useState("");
 
-    // Check if local user is Vocals
     const isVocals = localStorage.getItem("instrument") === "Vocals";
 
     useEffect(() => {
@@ -31,22 +27,35 @@ const LiveScreen = () => {
         };
     }, [autoScroll]);
 
-    // 3) Immediately pick a random quote, then change it every 10s
     useEffect(() => {
-        const initialIndex = Math.floor(Math.random() * quotes.length);
-        setRandomQuote(quotes[initialIndex]);
+        if (localStorage.getItem("isAdmin") === "true") {
+            const initialIndex = Math.floor(Math.random() * quotes.length);
+            setRandomQuote(quotes[initialIndex]);
+            socket.emit("quoteUpdateLive", {
+                room: `Main/${code}`,
+                quote: quotes[initialIndex],
+            });
+            const intervalId = setInterval(() => {
+                const newIndex = Math.floor(Math.random() * quotes.length);
+                setRandomQuote(quotes[newIndex]);
+                socket.emit("quoteUpdateLive", {
+                    room: `Main/${code}`,
+                    quote: quotes[newIndex],
+                });
+            }, 10000);
+            return () => clearInterval(intervalId);
+        }
+    }, [code]);
 
-        const intervalId = setInterval(() => {
-            const newIndex = Math.floor(Math.random() * quotes.length);
-            setRandomQuote(quotes[newIndex]);
-        }, 10000);
-
+    useEffect(() => {
+        socket.on("quoteUpdateLive", ({ quote }) => {
+            setRandomQuote(quote);
+        });
         return () => {
-            clearInterval(intervalId);
+            socket.off("quoteUpdateLive");
         };
     }, []);
 
-    // Listen for chords broadcast from admin
     useEffect(() => {
         socket.on("chordsData", ({ chords: c, lyrics: l }) => {
             setChords(isVocals ? l : c);
@@ -57,7 +66,6 @@ const LiveScreen = () => {
     }, [isVocals]);
 
     useEffect(() => {
-        // Only admin calls /extract
         const fetchChords = async () => {
             try {
                 const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/extract`, {
@@ -72,9 +80,7 @@ const LiveScreen = () => {
                     throw new Error("Extraction failed");
                 }
                 const data = await response.json();
-                // Admin sets own display
                 setChords(isVocals ? data.lyrics : data.chords);
-                // Then admin emits both
                 socket.emit("chordsData", {
                     room: `Main/${code}`,
                     chords: data.chords,
@@ -109,12 +115,10 @@ const LiveScreen = () => {
         setAutoScroll((prev) => !prev);
     };
 
-    // If chords contain Hebrew, right-align them
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
 
     return (
         <div className="page-container live-container">
-            {/* Keep "Live Chords" in its original place */}
             <h2 className="page-title">Live Chords</h2>
 
             {error ? (
@@ -134,7 +138,8 @@ const LiveScreen = () => {
                             position: "fixed",
                             top: "50%",
                             [isHebrew ? "left" : "right"]: "200px",
-                            transform: "translateY(-50%) rotate(-45deg) translate(-50%, -38px) scale(5)",
+                            transform:
+                                "translateY(-50%) rotate(-45deg) translate(-50%, -38px) scale(5)",
                             zIndex: 999,
                             cursor: "pointer",
                         }}
@@ -157,7 +162,6 @@ const LiveScreen = () => {
                     </div>
                 </>
             ) : (
-                // 4) Show loader + quote if chords haven’t loaded yet
                 <div className="loader-wrapper">
                     <div className="loader">
                         <div className="loader-square" />
@@ -169,7 +173,6 @@ const LiveScreen = () => {
                         <div className="loader-square" />
                         <div className="loader-square" />
                     </div>
-                    {/* Place the quote right underneath the loader */}
                     <p className="random-quote" style={{ marginTop: "1rem" }}>
                         "{randomQuote}"
                     </p>

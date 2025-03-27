@@ -9,7 +9,6 @@ const Main = () => {
     const [activeUsers, setActiveUsers] = useState([]);
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
-    // Store a random quote in state
     const [randomQuote, setRandomQuote] = useState("");
 
     localStorage.setItem("sessionCode", code);
@@ -51,22 +50,40 @@ const Main = () => {
             setActiveUsers(users);
         });
 
-        // Immediately pick a random quote
         const initialIndex = Math.floor(Math.random() * quotes.length);
         setRandomQuote(quotes[initialIndex]);
+        if (localStorage.getItem("isAdmin") === "true") {
+            socket.emit("quoteUpdate", {
+                room: `Main/${code}`,
+                quote: quotes[initialIndex],
+            });
+        }
 
-        // Change quote every 10 seconds
         const intervalId = setInterval(() => {
             const newIndex = Math.floor(Math.random() * quotes.length);
             setRandomQuote(quotes[newIndex]);
+            if (localStorage.getItem("isAdmin") === "true") {
+                socket.emit("quoteUpdate", {
+                    room: `Main/${code}`,
+                    quote: quotes[newIndex],
+                });
+            }
         }, 10000);
 
-        // Cleanup the interval on unmount
         return () => {
             clearInterval(intervalId);
             socket.off("updateUsers");
         };
     }, [code, navigate]);
+
+    useEffect(() => {
+        socket.on("quoteUpdate", ({ quote }) => {
+            setRandomQuote(quote);
+        });
+        return () => {
+            socket.off("quoteUpdate");
+        };
+    }, []);
 
     const handleCloseSession = () => {
         socket.emit("closeSession", { room: `Main/${code}` });
@@ -118,6 +135,9 @@ const Main = () => {
                                 <div className="loader-square"></div>
                                 <div className="loader-square"></div>
                             </div>
+                            <p className="random-quote" style={{ visibility: loading ? "visible" : "hidden", marginTop: "1rem" }}>
+                                "{randomQuote}"
+                            </p>
                         </div>
                     ) : (
                         <form className="page-form" onSubmit={handleSearchSubmit}>
@@ -133,13 +153,6 @@ const Main = () => {
                             </button>
                         </form>
                     )}
-                    {/* Always render the quote in the same position, but only visible during loading */}
-                    <p
-                        className="random-quote"
-                        style={{ visibility: loading ? "visible" : "hidden" }}
-                    >
-                        "{randomQuote}"
-                    </p>
                 </div>
             ) : (
                 <div className="user-section">
@@ -155,15 +168,19 @@ const Main = () => {
                             <div className="loader-square"></div>
                             <div className="loader-square"></div>
                             <div className="loader-square"></div>
-                            <div className="loader-square"></div>
                         </div>
+                        <p className="random-quote" style={{ marginTop: "1rem" }}>
+                            "{randomQuote}"
+                        </p>
                     </div>
                 </div>
             )}
 
-            {/* Close Session button beneath the container */}
             {localStorage.getItem("isAdmin") === "true" && (
-                <button onClick={handleCloseSession} className="primary-button close-session-button">
+                <button
+                    onClick={handleCloseSession}
+                    className="primary-button close-session-button"
+                >
                     Close Session
                 </button>
             )}
