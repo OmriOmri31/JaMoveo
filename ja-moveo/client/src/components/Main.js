@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
+import { quotes } from "./Quotes";
 
 const Main = () => {
     const { code } = useParams();
     const navigate = useNavigate();
     const [activeUsers, setActiveUsers] = useState([]);
     const [query, setQuery] = useState("");
-    const [loading, setLoading] = useState(false); // NEW: Loading state
+    const [loading, setLoading] = useState(false);
+    // Store a random quote in state
+    const [randomQuote, setRandomQuote] = useState("");
 
-    // Save session code for use in other pages
     localStorage.setItem("sessionCode", code);
 
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/session/${code}`);
+                const response = await fetch(
+                    `${process.env.REACT_APP_SERVICE_TWO_URL}/session/${code}`
+                );
                 if (!response.ok) {
-                    if (localStorage.getItem("isAdmin") === "false")
+                    if (localStorage.getItem("isAdmin") === "false") {
                         navigate("/Home");
-                    else
+                    } else {
                         navigate("/HomeAdmin");
+                    }
                 }
             } catch (error) {
                 console.error(error);
-                if (localStorage.getItem("isAdmin") === "false")
+                if (localStorage.getItem("isAdmin") === "false") {
                     navigate("/Home");
-                else
+                } else {
                     navigate("/HomeAdmin");
+                }
                 alert("Server error");
                 return;
             }
@@ -35,7 +41,6 @@ const Main = () => {
 
         checkSession();
 
-        // Join the session room; pass isAdmin flag (of type string) from localStorage
         socket.emit("joinLobby", {
             room: `Main/${code}`,
             user: localStorage.getItem("nickname"),
@@ -46,29 +51,40 @@ const Main = () => {
             setActiveUsers(users);
         });
 
-        // Do not disconnect on unmount so the admin remains in the room
+        // Immediately pick a random quote
+        const initialIndex = Math.floor(Math.random() * quotes.length);
+        setRandomQuote(quotes[initialIndex]);
+
+        // Change quote every 10 seconds
+        const intervalId = setInterval(() => {
+            const newIndex = Math.floor(Math.random() * quotes.length);
+            setRandomQuote(quotes[newIndex]);
+        }, 10000);
+
+        // Cleanup the interval on unmount
         return () => {
+            clearInterval(intervalId);
             socket.off("updateUsers");
         };
     }, [code, navigate]);
 
-    // Handler for admin to close the session
     const handleCloseSession = () => {
         socket.emit("closeSession", { room: `Main/${code}` });
     };
 
-    // Handler for song search submission
     const handleSearchSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // Show loader while waiting for results
-        const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/results`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ songName: query }),
-        });
+        setLoading(true);
+        const response = await fetch(
+            `${process.env.REACT_APP_SERVICE_TWO_URL}/results`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ songName: query }),
+            }
+        );
         const data = await response.json();
-        setLoading(false); // Hide loader
-        // Navigate to TableScreen with the search results
+        setLoading(false);
         navigate("/table", { state: { results: data.results } });
     };
 
@@ -88,7 +104,6 @@ const Main = () => {
                 <div className="admin-section">
                     <h3 className="section-title">Search any song...</h3>
                     {loading ? (
-                        // Show loader for admin when waiting for search results
                         <div className="loader-wrapper">
                             <h3 className="section-title">
                                 Searching for your song's chords...
@@ -118,15 +133,18 @@ const Main = () => {
                             </button>
                         </form>
                     )}
-                    <br />
-                    <button onClick={handleCloseSession} className="primary-button">
-                        Close Session
-                    </button>
+                    {/* Always render the quote in the same position, but only visible during loading */}
+                    <p
+                        className="random-quote"
+                        style={{ visibility: loading ? "visible" : "hidden" }}
+                    >
+                        "{randomQuote}"
+                    </p>
                 </div>
             ) : (
                 <div className="user-section">
                     <h3 className="section-title">
-                        Waiting for your boss to pick a song to jam
+                        Waiting for your boss to pick a song for jamming
                     </h3>
                     <div className="loader-wrapper">
                         <div className="loader">
@@ -141,6 +159,13 @@ const Main = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Close Session button beneath the container */}
+            {localStorage.getItem("isAdmin") === "true" && (
+                <button onClick={handleCloseSession} className="primary-button close-session-button">
+                    Close Session
+                </button>
             )}
         </div>
     );
