@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
+// Import your quotes array
 import { quotes } from "./Quotes";
 
 const LiveScreen = () => {
@@ -11,8 +12,11 @@ const LiveScreen = () => {
     const [error, setError] = useState(null);
     const [autoScroll, setAutoScroll] = useState(false);
     const navigate = useNavigate();
+
+    // Random quote for loading
     const [randomQuote, setRandomQuote] = useState("");
 
+    // Check if local user is Vocals
     const isVocals = localStorage.getItem("instrument") === "Vocals";
 
     useEffect(() => {
@@ -27,35 +31,22 @@ const LiveScreen = () => {
         };
     }, [autoScroll]);
 
+    // Immediately pick a random quote, then change it every 10s
     useEffect(() => {
-        if (localStorage.getItem("isAdmin") === "true") {
-            const initialIndex = Math.floor(Math.random() * quotes.length);
-            setRandomQuote(quotes[initialIndex]);
-            socket.emit("quoteUpdateLive", {
-                room: `Main/${code}`,
-                quote: quotes[initialIndex],
-            });
-            const intervalId = setInterval(() => {
-                const newIndex = Math.floor(Math.random() * quotes.length);
-                setRandomQuote(quotes[newIndex]);
-                socket.emit("quoteUpdateLive", {
-                    room: `Main/${code}`,
-                    quote: quotes[newIndex],
-                });
-            }, 10000);
-            return () => clearInterval(intervalId);
-        }
-    }, [code]);
+        const initialIndex = Math.floor(Math.random() * quotes.length);
+        setRandomQuote(quotes[initialIndex]);
 
-    useEffect(() => {
-        socket.on("quoteUpdateLive", ({ quote }) => {
-            setRandomQuote(quote);
-        });
+        const intervalId = setInterval(() => {
+            const newIndex = Math.floor(Math.random() * quotes.length);
+            setRandomQuote(quotes[newIndex]);
+        }, 10000);
+
         return () => {
-            socket.off("quoteUpdateLive");
+            clearInterval(intervalId);
         };
     }, []);
 
+    // Listen for chords broadcast from admin
     useEffect(() => {
         socket.on("chordsData", ({ chords: c, lyrics: l }) => {
             setChords(isVocals ? l : c);
@@ -66,21 +57,27 @@ const LiveScreen = () => {
     }, [isVocals]);
 
     useEffect(() => {
+        // Only admin calls /extract
         const fetchChords = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_SERVICE_TWO_URL}/extract`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        url: href,
-                        isAdmin: localStorage.getItem("isAdmin") === "true",
-                    }),
-                });
+                const response = await fetch(
+                    `${process.env.REACT_APP_SERVICE_TWO_URL}/extract`,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            url: href,
+                            isAdmin: localStorage.getItem("isAdmin") === "true",
+                        }),
+                    }
+                );
                 if (!response.ok) {
                     throw new Error("Extraction failed");
                 }
                 const data = await response.json();
+                // Admin sets own display
                 setChords(isVocals ? data.lyrics : data.chords);
+                // Then admin emits both
                 socket.emit("chordsData", {
                     room: `Main/${code}`,
                     chords: data.chords,
@@ -115,6 +112,7 @@ const LiveScreen = () => {
         setAutoScroll((prev) => !prev);
     };
 
+    // If chords contain Hebrew, right-align them
     const isHebrew = /[\u0590-\u05FF]/.test(chords);
 
     return (
@@ -162,7 +160,8 @@ const LiveScreen = () => {
                     </div>
                 </>
             ) : (
-                <div className="loader-wrapper">
+                // Loader + quote while chords haven't loaded
+                <div className="loader-wrapper" style={{ position: "relative" }}>
                     <div className="loader">
                         <div className="loader-square" />
                         <div className="loader-square" />
@@ -173,7 +172,17 @@ const LiveScreen = () => {
                         <div className="loader-square" />
                         <div className="loader-square" />
                     </div>
-                    <p className="random-quote" style={{ marginTop: "1rem" }}>
+                    {/* Absolutely-positioned so it won't shift the loader */}
+                    <p
+                        className="random-quote"
+                        style={{
+                            position: "absolute",
+                            bottom: "-2rem",
+                            width: "100%",
+                            textAlign: "center",
+                            margin: 0,
+                        }}
+                    >
                         "{randomQuote}"
                     </p>
                 </div>

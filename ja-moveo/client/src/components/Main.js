@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
+// Import your quotes array
 import { quotes } from "./Quotes";
 
 const Main = () => {
@@ -9,6 +10,8 @@ const Main = () => {
     const [activeUsers, setActiveUsers] = useState([]);
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // Store a random quote in state
     const [randomQuote, setRandomQuote] = useState("");
 
     localStorage.setItem("sessionCode", code);
@@ -50,40 +53,22 @@ const Main = () => {
             setActiveUsers(users);
         });
 
+        // Immediately pick a random quote
         const initialIndex = Math.floor(Math.random() * quotes.length);
         setRandomQuote(quotes[initialIndex]);
-        if (localStorage.getItem("isAdmin") === "true") {
-            socket.emit("quoteUpdate", {
-                room: `Main/${code}`,
-                quote: quotes[initialIndex],
-            });
-        }
 
+        // Change quote every 10 seconds
         const intervalId = setInterval(() => {
             const newIndex = Math.floor(Math.random() * quotes.length);
             setRandomQuote(quotes[newIndex]);
-            if (localStorage.getItem("isAdmin") === "true") {
-                socket.emit("quoteUpdate", {
-                    room: `Main/${code}`,
-                    quote: quotes[newIndex],
-                });
-            }
         }, 10000);
 
+        // Cleanup the interval on unmount
         return () => {
             clearInterval(intervalId);
             socket.off("updateUsers");
         };
     }, [code, navigate]);
-
-    useEffect(() => {
-        socket.on("quoteUpdate", ({ quote }) => {
-            setRandomQuote(quote);
-        });
-        return () => {
-            socket.off("quoteUpdate");
-        };
-    }, []);
 
     const handleCloseSession = () => {
         socket.emit("closeSession", { room: `Main/${code}` });
@@ -121,7 +106,10 @@ const Main = () => {
                 <div className="admin-section">
                     <h3 className="section-title">Search any song...</h3>
                     {loading ? (
-                        <div className="loader-wrapper">
+                        <div
+                            className="loader-wrapper"
+                            style={{ position: "relative" }}
+                        >
                             <h3 className="section-title">
                                 Searching for your song's chords...
                             </h3>
@@ -135,7 +123,17 @@ const Main = () => {
                                 <div className="loader-square"></div>
                                 <div className="loader-square"></div>
                             </div>
-                            <p className="random-quote" style={{ visibility: loading ? "visible" : "hidden", marginTop: "1rem" }}>
+                            {/* Absolutely-positioned quote so loader doesn't shift */}
+                            <p
+                                className="random-quote"
+                                style={{
+                                    position: "absolute",
+                                    bottom: "-2rem",
+                                    width: "100%",
+                                    textAlign: "center",
+                                    margin: 0,
+                                }}
+                            >
                                 "{randomQuote}"
                             </p>
                         </div>
@@ -159,7 +157,10 @@ const Main = () => {
                     <h3 className="section-title">
                         Waiting for your boss to pick a song for jamming
                     </h3>
-                    <div className="loader-wrapper">
+                    <div
+                        className="loader-wrapper"
+                        style={{ position: "relative" }}
+                    >
                         <div className="loader">
                             <div className="loader-square"></div>
                             <div className="loader-square"></div>
@@ -168,8 +169,19 @@ const Main = () => {
                             <div className="loader-square"></div>
                             <div className="loader-square"></div>
                             <div className="loader-square"></div>
+                            <div className="loader-square"></div>
                         </div>
-                        <p className="random-quote" style={{ marginTop: "1rem" }}>
+                        {/* Absolutely-positioned quote so loader doesn't shift */}
+                        <p
+                            className="random-quote"
+                            style={{
+                                position: "absolute",
+                                bottom: "-2rem",
+                                width: "100%",
+                                textAlign: "center",
+                                margin: 0,
+                            }}
+                        >
                             "{randomQuote}"
                         </p>
                     </div>
